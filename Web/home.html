@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Progress - Step Design</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_purple-pink.min.css" />
+	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+     <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+  <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+	<!-- Main Stylesheet -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body onload="">
+
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  	<header class="mdl-layout__header">
+    <div class="mdl-layout-icon"></div>
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout__title">Step Design
+      	<span class="page-title-span"> | </span>
+      	<span class="page-title-span"> Home </span>
+      </span>
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation">
+       <!-- Colored raised button -->
+		<button id="signOutBtn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" onclick="signOutBtn()">Sign Out<i class="button-right-icon material-icons">account_circle</i></button>
+      </nav>
+    </div>
+  </header>
+   <div class="mdl-layout__drawer">
+     <span id="title-name" class="mdl-layout-title">...</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="home.html">Home</a>
+      <a class="mdl-navigation__link" href="projectList.html">Projects</a>
+      <a class="mdl-navigation__link" href="defectList.html">Defects</a>
+      <a class="mdl-navigation__link" href="#">Setting</a>
+     <a class="mdl-navigation__link "  onclick="signOutBtn()">Sign out</a>
+    </nav>
+  </div>
+   <main class="mdl-layout__content">
+    <div class="page-content"><!-- Your content goes here -->
+      
+      <header id="header">
+      <div class="container">
+      	<div class="row">
+      		<div class="col-md-10 col-xs-10">
+      			<h1><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Dashboard <small>Manage your projects</small></h1>
+      		</div>
+	      		<div class="col-md-2">
+	      			<div class="dropdown create">
+					  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					    Create Users
+					    <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+					    <li><a type="button" data-toggle="modal" data-target="#">Add user</a></li>
+					    <li><a href="#">Monitor User</a></li>
+					    <li><a href="#">Edit User</a></li>
+					  </ul>
+		</div>
+	      		</div>
+	      	</div>
+      </div>
+  </header>
+
+  <section id="breadcrumb">
+  	<div class="container">
+  		<ol class="breadcrumb">
+  			<li class="active">
+  				Dashboard
+  			</li>
+  		</ol>
+  	</div>
+  </section>
+
+<section id="main">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="list-group">
+				  <button type="button" class="list-group-item main-color-background"><span class="glyphicon glyphicon-cog"></span> Shortcut</button>
+				  <a href="projectList.html" role="button" class="list-group-item col-md-12 col-xs-12">Projects</a><button id="paging-defects" type="button" class="list-group-item">Defects</button>
+				</div>
+			</div>
+			<div class="col-md-9">
+				<!-- Project Overview -->
+				<div class="panel panel-default">
+				  <div class="panel-heading main-color-background">
+				    <h3 class="panel-title">Project Overview</h3>
+				  </div>
+				  <div class="panel-body">
+				   	<div class="col-md-4">
+				   		<div class="well dash-box">
+				   			<h2 id="overviewProj"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> -</h2>
+				   			<h4>Projects</h4>
+				   		</div>
+				   	</div>
+				   	<div class="col-md-4">
+				   		<div class="well dash-box">
+				   			<h2 id="overviewDef"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> -</h2>
+				   			<h4>Defects</h4>
+				   		</div>
+				   	</div>
+				   	<div class="col-md-4">
+				   		<div class="well dash-box">
+				   			<h2 id="overviewClient"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> -</h2>
+				   			<h4>Clients</h4>
+				   		</div>
+				   	</div>
+				  </div>
+				</div>
+
+				<!-- CLient Details -->
+				<div class="panel panel-default">
+				  <div class="panel-heading main-color-background">
+				    <h3 class="panel-title">Client Details</h3>
+				  </div>
+				  <div class="panel-body">
+            <table id="clientDetails" class="table table-hover">
+      
+            </table>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+  
+    </div>
+  </main>
+</div>
+
+<!-- Modals -->
+
+<!-- Add Project -->
+<div class="modal fade" id="addProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <form id="projectInputForm">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Project:</h4>
+        <h5>* Required</h5>
+      </div>
+      <div class="modal-body">
+              <div class="form-group">
+                <label for="projectTitleInput">Project title *</label>
+                <input type="text" class="form-control" id="projectTitleInput" placeholder="Enter title here ..."  required>
+              </div>
+              <div class="form-group">
+                <label for="projectDescInput">Description</label>
+                <input type="text" class="form-control" id="projectDescInput" placeholder="Describe the project ...">
+              </div>
+              <div class="form-group">
+                <label for="projectCliNameInput">Client name *</label>
+                <input type="text" class="form-control" id="projectCliNameInput" placeholder="Enter client name here ..." required>
+              </div>
+              <div class="form-group">
+                <label for="projectCliNumInput">Client number *</label>
+                <input type="number" class="form-control" id="projectCliNumInput" placeholder="Enter client contact number here ..." required>
+              </div>
+              <div class="form-group">
+                <label for="projectCliEmailInput">Client email *</label>
+                <input type="email" class="form-control" id="projectCliEmailInput" placeholder="Enter client email here ..." required>
+              </div>
+              <div class="form-group">
+                <label for="projectLocationInput">Location *</label>
+                <input type="text" class="form-control" id="projectLocationInput" placeholder="Enter project location here ..." required>
+              </div>
+              <div class="form-group">
+                <label for="projectDateInput">Date *</label>
+                <input type="Date" class="form-control" id="projectDateInput" required>
+              </div>
+              <div class="form-group">
+                <label for="projectNotesInput">Notes (Optional)</label>
+                <input type="text" class="form-control" id="projectNotesInput" value="none" placeholder="Enter additional notes here ...">
+              </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+  </form>
+    </div>
+  </div>
+</div>
+
+
+<!--<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>-->
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.0/firebase-database.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyB-rXLOd4NDJgb1zPmi7c6QW4Z7g_plQ4s",
+    authDomain: "mproject-sharedb.firebaseapp.com",
+    databaseURL: "https://mproject-sharedb.firebaseio.com",
+    projectId: "mproject-sharedb",
+    storageBucket: "mproject-sharedb.appspot.com",
+    messagingSenderId: "809141665249"
+  };
+  firebase.initializeApp(config);
+</script>
+
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/home.js"></script>
+</body>
+</html>

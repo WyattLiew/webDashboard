@@ -1,0 +1,98 @@
+*{
+	box-sizing: border-box;
+	font-family: 'Roboto',sans-serif;
+	outline: none;
+}
+
+.page-title-span{
+	margin-left: 10px;
+}
+
+.button-right-icon {
+	margin-left: 10px;	
+}
+
+.search-container{
+	display: block;
+   left: 40%;
+}
+
+.contentImage{
+	width: 100%;
+	height: auto;	
+}
+
+.col-lg-4{
+	display: inline-block;
+	max-width: 33.333333%;
+	padding: 2px;
+}
+
+.image-description {
+	font-weight: 200;
+	color: midnightblue;
+	border-bottom: 6px solid blanchedalmond;
+}
+
+#submitProgress{
+	display: none;
+}
+
+#submitDefDetails{
+	display: none;
+}
+
+#progressHeader{
+	display: none;
+	margin: 16px;
+}
+
+#defectsHeader {
+	display: none;
+	margin: 16px;
+}
+
+#projForm{
+	display: none;
+}
+
+.margin-10{
+	margin-left:10px;
+}
+/*tracking form*/
+
+.tracking-form{
+	width: 85%;
+	max-width: 600px;
+	background: #f1f1f1;
+	margin-bottom: 20px;
+	padding: 30px 40px;
+	margin:auto;
+	box-sizing: border-box;
+	border-radius: 8px;
+	text-align: center;
+	box-shadow: 0 0 20px #000000b3;
+	font-family: "Montserrat",sans-serif;
+}
+.tracking-form h1{
+	margin-top: 0;
+	font-size: xx-large;
+	font-weight: 200;
+	text-transform: uppercase;
+}
+
+.tracking-list{
+	display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	background: #673AB7;
+	padding: 14px 0;
+	color: white;
+	text-transform: uppercase;
+	margin-top: 8px;
+	width: 100%;
+}

@@ -1,0 +1,79 @@
+.main-color-background{
+	background: #673ab7 !important;
+	color: #ffffff !important;
+}
+
+/** Project form  */
+input {
+	border:none;
+	outline:none;
+	background:none;
+}
+.invert input{
+	border:0.1px solid rgba(0,0,0,2);
+	outline: none;
+	background: white;
+	padding:6px;
+	max-width: 100%;
+}
+
+a:nth-of-type(1) {
+	display: inline-block;
+}
+a:nth-of-type(2) {
+	display: none;
+}
+a:nth-of-type(3) {
+	display: none;
+}
+
+.invert>a:nth-of-type(1){
+	display: none;
+}
+.invert>a:nth-of-type(2){
+	display: inline-block;
+}
+.invert>a:nth-of-type(3){
+	display: inline-block;
+}
+.invert >div:nth-of-type(1){
+	display: none;
+}
+
+/** Details style # Projects **/
+
+.box-style-1 {
+	background-color: #E9EEF2;
+	padding: 1rem;
+	margin-bottom: 10px;
+}
+
+.box-style-2 {
+	box-sizing: border-box;
+	box-shadow: 0 0.1875rem 0.375rem rgba(33, 37, 41, 0.05);
+	background-color: #fff;
+	border-radius: 0.5rem;
+}
+
+/** Home page Header */
+
+#header{
+	background: #333333;
+	color: #ffffff;
+	padding-bottom: 10px;
+	margin-bottom: 15px;
+}
+
+#header .create{
+	padding-top: 25px;
+}
+
+.dash-box{
+	text-align: center;
+}
+
+/** Progress close btn **/
+.close {
+	color: #fff;
+}
+
