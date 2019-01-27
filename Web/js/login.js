@@ -93,7 +93,7 @@ function retrieveData(currentUser){
   });
 }
 
-
+/*
 // prevent return button
 (function (global) { 
 
@@ -127,5 +127,4 @@ function retrieveData(currentUser){
     }
 
 })(window);
-
-
+*/

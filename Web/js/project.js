@@ -278,13 +278,13 @@ function enterProject(projId,projTitle) {
 	var value1 = projId;
 	var value2 = projTitle;
 
-  	//var queryString = "?para=" + value1;
+  	var queryString = "?para=" + value1;
 
   	// passing title to progressList page //
     localStorage.setItem('objectToPass',value2);
     // passing proID to progressList page //
     localStorage.setItem('idToPass',value1);
 
-    window.location.href = "progressList.html" ;
+    window.location.href = "progressList.html" + queryString;
     
 }

@@ -8,8 +8,8 @@ var progressStorageRef = storage.ref("Projects Add On");
 var UID;
 
 // get data from project page //
-//var queryString = decodeURIComponent(window.location.search);
-//queryString = queryString.substring(6);
+var queryString = decodeURIComponent(window.location.search);
+queryString = queryString.substring(6);
 
 var projTitle = localStorage.getItem("objectToPass");
 var queryString = localStorage.getItem("idToPass");
