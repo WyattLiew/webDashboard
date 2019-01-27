@@ -285,6 +285,7 @@ function enterProject(projId,projTitle) {
     // passing proID to progressList page //
     localStorage.setItem('idToPass',value1);
 
-    window.location.href = "progressList.html" + queryString;
+    location.href = "progressList.html" + queryString;
+
     
 }
