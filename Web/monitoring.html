@@ -28,7 +28,7 @@
     <div class="mdl-layout__header-row">
       <span class="mdl-layout__title">Step Design
       	<span class="page-title-span"> | </span>
-      	<span class="page-title-span"> Home </span>
+      	<span class="page-title-span"> Users </span>
       </span>
       <div class="mdl-layout-spacer"></div>
       <nav class="mdl-navigation">
@@ -54,7 +54,7 @@
       <div class="container">
       	<div class="row">
       		<div class="col-md-10 col-xs-10">
-      			<h1><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Dashboard <small>Manage your projects</small></h1>
+      			<h1><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Monitoring <small>Current Project Status</small></h1>
       		</div>
 	      		<div class="col-md-2">
 	      			<div class="dropdown create">
@@ -63,7 +63,7 @@
 					    <span class="caret"></span>
 					  </button>
 					  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-					    <li><a data-toggle="modal" data-target="#">Coming soon</a></li>
+					    <li><a data-toggle="modal" data-target="#addUser">Add User</a></li>
 					  </ul>
 		</div>
 	      		</div>
@@ -74,8 +74,9 @@
   <section id="breadcrumb">
   	<div class="container">
   		<ol class="breadcrumb">
+        <li><a href="home.html">Home</a></li>
   			<li class="active">
-  				Home
+  				Users
   			</li>
   		</ol>
   	</div>
@@ -84,50 +85,15 @@
 <section id="main">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-3">
-				<div class="list-group">
-				  <button type="button" class="list-group-item main-color-background"><span class="glyphicon glyphicon-cog"></span> Shortcut</button>
-				  <a href="projectList.html" role="button" class="list-group-item col-md-12 col-xs-12">Projects</a>
-          <button id="paging-defects" type="button" class="list-group-item">Defects</button>
-          <button id="paging-users" type="button" class="list-group-item hidden">Users</button>
-				</div>
-			</div>
-			<div class="col-md-9">
-				<!-- Project Overview -->
-				<div class="panel panel-default">
-				  <div class="panel-heading main-color-background">
-				    <h3 class="panel-title">Project Overview</h3>
-				  </div>
-				  <div class="panel-body">
-				   	<div class="col-md-4">
-				   		<div class="well dash-box">
-				   			<h2 id="overviewProj"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> -</h2>
-				   			<h4>Projects</h4>
-				   		</div>
-				   	</div>
-				   	<div class="col-md-4">
-				   		<div class="well dash-box">
-				   			<h2 id="overviewDef"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> -</h2>
-				   			<h4>Defects</h4>
-				   		</div>
-				   	</div>
-				   	<div class="col-md-4">
-				   		<div class="well dash-box">
-				   			<h2 id="overviewClient"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> -</h2>
-				   			<h4>Clients</h4>
-				   		</div>
-				   	</div>
-				  </div>
-				</div>
 
 				<!-- CLient Details -->
 				<div class="panel panel-default">
 				  <div class="panel-heading main-color-background">
-				    <h3 class="panel-title">Client Details</h3>
+				    <h3 class="panel-title">Users</h3>
 				  </div>
 				  <div class="panel-body">
             <div class="table-responsive">
-            <table id="clientDetails" class="table table-hover">
+            <table id="userList" class="table table-hover" >
       
             </table>
 				  </div>
@@ -145,53 +111,48 @@
 <!-- Modals -->
 
 <!-- Add Project -->
-<div class="modal fade" id="addProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
     <form id="projectInputForm">
-      <div class="modal-header">
+      <div class="modal-header main-color-background">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">New Project:</h4>
+        <h4 class="modal-title" id="myModalLabel">New User:</h4>
         <h5>* Required</h5>
       </div>
       <div class="modal-body">
               <div class="form-group">
-                <label for="projectTitleInput">Project title *</label>
-                <input type="text" class="form-control" id="projectTitleInput" placeholder="Enter title here ..."  required>
+                <label for="userNameInput">Name *</label>
+                <input type="text" class="form-control" id="userNameInput" placeholder="Enter name here ..." required>
               </div>
               <div class="form-group">
-                <label for="projectDescInput">Description</label>
-                <input type="text" class="form-control" id="projectDescInput" placeholder="Describe the project ...">
+                <label for="userNumInput">Contact number *</label>
+                <input type="number" class="form-control" id="userNumInput" placeholder="Enter contact number here ..." required>
               </div>
               <div class="form-group">
-                <label for="projectCliNameInput">Client name *</label>
-                <input type="text" class="form-control" id="projectCliNameInput" placeholder="Enter client name here ..." required>
+                <label for="projectCliEmailInput">Email *</label>
+                <input type="email" class="form-control" id="projectCliEmailInput" placeholder="Enter email here ..." required>
               </div>
               <div class="form-group">
-                <label for="projectCliNumInput">Client number *</label>
-                <input type="number" class="form-control" id="projectCliNumInput" placeholder="Enter client contact number here ..." required>
+                <label for="userPasswordInput">Password *</label>
+                <input type="password" class="form-control" id="userPasswordInput" placeholder="Enter password here ..." required>
               </div>
               <div class="form-group">
-                <label for="projectCliEmailInput">Client email *</label>
-                <input type="email" class="form-control" id="projectCliEmailInput" placeholder="Enter client email here ..." required>
+                <label for="userConfirmPasswordInput">Confirm Password *</label>
+                <input type="password" class="form-control" id="userConfirmPasswordInput" placeholder="Enter password here ..." required>
               </div>
               <div class="form-group">
-                <label for="projectLocationInput">Location *</label>
-                <input type="text" class="form-control" id="projectLocationInput" placeholder="Enter project location here ..." required>
+                <label for="userRoleInput">Role *</label><br>
+                <label for="userRoleAdmin" class="radio-inline"> <input type="radio" id="userRoleAdmin" name="admin" >Admin </label>
+                <label for="userRoleMember" class="radio-inline"><input type="radio" id="userRoleMember" name="admin" checked>Member </label>
+                 <label for="userRoleClient" class="radio-inline"><input type="radio" id="userRoleClient" name="admin">Client </label>
               </div>
-              <div class="form-group">
-                <label for="projectDateInput">Date *</label>
-                <input type="Date" class="form-control" id="projectDateInput" required>
-              </div>
-              <div class="form-group">
-                <label for="projectNotesInput">Notes (Optional)</label>
-                <input type="text" class="form-control" id="projectNotesInput" value="none" placeholder="Enter additional notes here ...">
-              </div>
+              
       </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary">Create Account</button>
       </div>
   </form>
     </div>
@@ -217,6 +178,6 @@
 </script>
 
 <script type="text/javascript" src="js/login.js"></script>
-<script type="text/javascript" src="js/home.js"></script>
+<script type="text/javascript" src="js/monitor/user.js"></script>
 </body>
 </html>

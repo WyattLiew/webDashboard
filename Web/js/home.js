@@ -6,19 +6,41 @@ firebase.auth().onAuthStateChanged(function(user){
     
     queryProjectDatabase(UID);
     queryDefectDatabase(UID);
+    checkAdmin(UID);
 	}else{
 		//
 	}
 });
 
-// shortcut change page button
-document.getElementById("paging-defects").addEventListener('click', changePage);
+function checkAdmin(currentUser){
+  firebase.database().ref('/Users/' + currentUser).once('value').then(function(snapshot){
+    var usersObject = snapshot.val();
+    
+    var isAdmin = snapshot.child("isAdmin").val();
+    if(isAdmin == true){
+      document.getElementById("paging-users").classList.remove("hidden");
+    }
+}).catch(function(error){
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    window.alert("Error : " + errorMessage);
+  });
+}
 
-function changePage () {
+// shortcut change page button
+document.getElementById("paging-defects").addEventListener('click', changePageToDefects);
+
+function changePageToDefects () {
 
 	window.location.href = "defectList.html" ;
 }
+// shortcut change page button
+document.getElementById("paging-users").addEventListener('click', changePageToUsers);
 
+function changePageToUsers () {
+
+  window.location.href = "monitoring.html" ;
+}
 /* Project overview   */
 function queryProjectDatabase(UID){
   firebase.database().ref('/Projects/' + UID).once('value').then(function(snapshot){
