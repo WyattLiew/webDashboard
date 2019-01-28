@@ -45,15 +45,8 @@ function fetchUsers(){
 
     userList.innerHTML +='<td>'+ currentObject.name+'</td>'+'<td>'+ currentObject.email+'</td>'+'<td>'+currentObject.phone+'</td>'+
      								'<td>'+ userRoleEdit+'</td>' +
-                    '<td><div class="btn-group action-btn">' +
-                    '<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
-                    '<ul class="dropdown-menu">' +
-                    '<li><a href="#" onclick="enterProject(\''+userID+'\')">Project</a></li>'+
-                    '<li role="separator" class="divider"></li>'+
-                    '<li><a href="#" onclick="enterDefect(\''+userID+'\')" >Defect</a></li>' +
-                    '</ul>'+
-                    '</div>' +
-                    '</td>' + " " ;	
+                    '<td><a href="#" onclick="enterProject(\''+userID+'\')" class="btn btn-success">Project</a></td>'+
+                    '<td><a href="#" onclick="enterDefect(\''+userID+'\')" class="btn btn-info">Defect</a></td>';
     }
     userList.innerHTML += '</tr>';
 

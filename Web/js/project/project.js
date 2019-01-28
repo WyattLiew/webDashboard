@@ -123,7 +123,7 @@ function fetchProjects(UID){
     projectList.innerHTML +='<div class="col-md-6">' +
     							'<div class="well box-style-2" id="\''+projectID+'\'">'+
 								'<h6>Project ID: ' + currentObject.id + '</h6>' +
-								'<h3>' + '<input id="\''+projectTitleEdit+'\'" value="'+currentObject.title+'" class="text-capitalize title-size" readonly required>' + '</h3>'+
+								'<h3>' + '<input id="\''+projectTitleEdit+'\'" value="'+currentObject.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
 								'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
 								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+projectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
 								'<br></br>' +
