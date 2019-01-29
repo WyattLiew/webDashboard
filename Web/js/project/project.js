@@ -125,17 +125,17 @@ function fetchProjects(UID){
 								'<h6>Project ID: ' + currentObject.id + '</h6>' +
 								'<h3>' + '<input id="\''+projectTitleEdit+'\'" value="'+currentObject.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
 								'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+projectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
+								'<span class="glyphicon glyphicon-time col-md-12">' +" "+ '<input id="\''+projectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-user col-md-6 ">'+ " " +'<input id="\''+projectCliNameEdit+'\'" value="'+currentObject.name+'"  readonly required>' + '</span>' +
+								'<span class="glyphicon glyphicon-user col-md-12">'+ " " +'<input id="\''+projectCliNameEdit+'\'" value="'+currentObject.name+'"  readonly required>' + '</span>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-earphone col-md-6">' + " " +'<input id="\''+projectCliNumEdit+'\'" type="number" value="'+currentObject.number+'" readonly required>' + ' </span>'+
+								'<span class="glyphicon glyphicon-earphone col-md-12">' + " " +'<input id="\''+projectCliNumEdit+'\'" type="number" value="'+currentObject.number+'" readonly required>' + ' </span>'+
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-envelope col-md-6">' + " " +'<input id="\''+projectCliEmailEdit+'\'" type="email" value="'+currentObject.email+'"  readonly required>' + "</span>" +
+								'<span class="glyphicon glyphicon-envelope col-md-12">' + " " +'<input id="\''+projectCliEmailEdit+'\'" type="email" value="'+currentObject.email+'"  readonly required>' + "</span>" +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-flag col-md-6">' + " " +'<input id="\''+projectLocationEdit+'\'" value="'+currentObject.location+'"  readonly required>' + '</span>' +
+								'<span class="glyphicon glyphicon-flag col-md-12">' + " " +'<input id="\''+projectLocationEdit+'\'" value="'+currentObject.location+'"  readonly required>' + '</span>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+projectNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
+								'<span class="glyphicon glyphicon-comment col-md-12">' + " " +'<input id="\''+projectNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
 								'<br></br>' +
 								'<a href="#" onclick="enterProject(\''+projectID+'\',\''+currentObject.title+'\')" class="btn btn-success">Enter</a>' + " " + 
 								'<a href="#" onclick="saveEdit(\''+projectID+'\', \''+clientId+'\',\''+projectTitleEdit+'\',\''+projectDescEdit+'\',\''+projectCliNameEdit+'\',\''+projectCliNumEdit+'\',\''+projectCliEmailEdit+'\',\''+projectLocationEdit+'\',\''+projectDateEdit+'\',\''+projectNotesEdit+'\')" class="btn btn-success">Save</a>' + " " + 
