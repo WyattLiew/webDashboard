@@ -179,7 +179,7 @@ function fetchProgress(queryString){
       var progressNotesEdit = progressID+currentObject.notes+"1";
       var progressSelectStatusEdit = progressID + "Status";
       var progressEveryoneLabel = progressID + "LEveryone";
-      var progressUserOnlyLabel = progressID + "LMenbers";
+      var progressUserOnlyLabel = progressID + "LMembers";
       var progressEveryoneEdit = progressID + "Everyone";
       var progressUserOnlyEdit = progressID + "Members";
 
@@ -194,7 +194,7 @@ function fetchProgress(queryString){
 								'<br></br>' +
 								'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+progressVisibilityEdit+'\'" type="text" value="'+getVisibility(currentObject.visibility)+'" class="text-uppercase" readonly required>' + 
 								'<label id="\''+progressEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressEveryoneEdit+'\'" name="\''+progressID+"visibility"+'\'" checked>Everyone </label>' +
-								'<label id="\''+progressUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressUserOnlyEdit+'\'" name="\''+progressID+"visibility"+'\'">Menbers</label></span>' +
+								'<label id="\''+progressUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressUserOnlyEdit+'\'" name="\''+progressID+"visibility"+'\'">Members</label></span>' +
 								'<br></br>' +
 								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+progressNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
 								'<br></br>' +

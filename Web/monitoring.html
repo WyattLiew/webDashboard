@@ -43,7 +43,6 @@
       <a class="mdl-navigation__link" href="home.html">Home</a>
       <a class="mdl-navigation__link" href="projectList.html">Projects</a>
       <a class="mdl-navigation__link" href="defectList.html">Defects</a>
-      <a class="mdl-navigation__link" href="#">Setting</a>
      <a class="mdl-navigation__link "  onclick="signOutBtn()">Sign out</a>
     </nav>
   </div>
@@ -54,7 +53,7 @@
       <div class="container">
       	<div class="row">
       		<div class="col-md-10 col-xs-10">
-      			<h1><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Monitoring <small>Current Project Status</small></h1>
+      			<h1><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Admin <small>Current Project Status</small></h1>
       		</div>
 	      		<div class="col-md-2">
 	      			<div class="dropdown create">
@@ -63,7 +62,7 @@
 					    <span class="caret"></span>
 					  </button>
 					  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-					    <li><a data-toggle="modal" data-target="#addUser">Add User</a></li>
+					    <li><a href="#" data-toggle="modal" data-target="#addUser">Add User</a></li>
 					  </ul>
 		</div>
 	      		</div>
@@ -164,6 +163,9 @@
                 <label for="userRoleAdmin" class="radio-inline"> <input type="radio" id="userRoleAdmin" name="admin" >Admin </label>
                 <label for="userRoleMember" class="radio-inline"><input type="radio" id="userRoleMember" name="admin" checked>Member </label>
                  <label for="userRoleClient" class="radio-inline"><input type="radio" id="userRoleClient" name="admin">Client </label>
+              </div>
+              <div class="form-group">
+                <h6>Notes: Once account has been created, we'll send a link to user to change their password. </h6>
               </div>
               
       </div>

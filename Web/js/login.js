@@ -93,6 +93,29 @@ function retrieveData(currentUser){
   });
 }
 
+document.getElementById("resetPasswordForm").addEventListener('submit',resetPassword);
+
+// reset password function
+function resetPassword(e) {
+
+  var userEmail = document.getElementById("userEmailInput").value;
+
+e.preventDefault();
+// reset password firebase
+var auth = firebase.auth();
+var emailAddress = userEmail;
+
+  auth.sendPasswordResetEmail(emailAddress).then(function() {
+    // Reset field
+       document.getElementById('resetPasswordForm').reset();
+    // Email sent.
+    alert("Email sent! Please check your email.");
+  }).catch(function(error) {
+    // An error happened.
+    alert(error.message);
+  });
+}
+
 /*
 // prevent return button
 (function (global) { 
