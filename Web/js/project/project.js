@@ -14,7 +14,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchProjects(UID);
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 
@@ -137,9 +137,9 @@ function fetchProjects(UID){
 								'<br></br>' +
 								'<span class="glyphicon glyphicon-comment col-md-12">' + " " +'<input id="\''+projectNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
 								'<br></br>' +
-								'<a href="#" onclick="enterProject(\''+projectID+'\',\''+currentObject.title+'\')" class="btn btn-success">Enter</a>' + " " + 
-								'<a href="#" onclick="saveEdit(\''+projectID+'\', \''+clientId+'\',\''+projectTitleEdit+'\',\''+projectDescEdit+'\',\''+projectCliNameEdit+'\',\''+projectCliNumEdit+'\',\''+projectCliEmailEdit+'\',\''+projectLocationEdit+'\',\''+projectDateEdit+'\',\''+projectNotesEdit+'\')" class="btn btn-success">Save</a>' + " " + 
-								'<a href="#" onclick="cancelEdit(\''+projectID+'\')" class="btn btn-danger">cancel</a>' + " " + 
+								'<a href="#" onclick="enterProject(\''+projectID+'\',\''+currentObject.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+projectID+'\', \''+clientId+'\',\''+projectTitleEdit+'\',\''+projectDescEdit+'\',\''+projectCliNameEdit+'\',\''+projectCliNumEdit+'\',\''+projectCliEmailEdit+'\',\''+projectLocationEdit+'\',\''+projectDateEdit+'\',\''+projectNotesEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+projectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
 								'<div class="btn-group action-btn">' +
 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +

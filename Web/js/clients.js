@@ -20,7 +20,7 @@ firebase.auth().onAuthStateChanged(function(user){
     retrieveData(currentUser);
 
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 

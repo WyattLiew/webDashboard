@@ -13,7 +13,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchDefects(UID);
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 

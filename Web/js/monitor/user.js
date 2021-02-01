@@ -22,7 +22,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchUsers();
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 

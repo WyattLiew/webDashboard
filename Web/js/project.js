@@ -14,7 +14,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchProjects(UID);
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 

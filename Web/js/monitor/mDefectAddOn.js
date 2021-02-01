@@ -11,7 +11,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchDefDetails(defectId);
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 
@@ -41,25 +41,9 @@ function fetchDefDetails(defectId){
       var defDetailsEveryoneEdit = defDetailsID + "Everyone";
       var defDetailsUserOnlyEdit = defDetailsID + "Members";
 
-    defDetailsList.innerHTML +='<div class="col-md-6">' +
-    							'<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
-								'<h6>Defect Add On ID: ' + currentObject.id + '</h6>' +
-								'<img src="'+currentObject.imgURL+'"class="img-thumbnail contentImage">' +
-								'<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+currentObject.defect+'" class="text-capitalize" readonly required>' + '</h3>'+
-								'<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+currentObject.status+'" class="text-capitalize" readonly required>' +
-								'<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h6>' +
-								//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(currentObject.visibility)+'" class="text-uppercase" readonly required>' + 
-								'<label id="\''+defDetailsEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsEveryoneEdit+'\'" name="\''+defDetailsID+"visibility"+'\'" checked>Everyone </label>' +
-								'<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defDetailsNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
-								'<br></br>' +
-								'<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="btn btn-success">Show more</a>' + " " + 
-							  	'</div>' +
-								'</div>';
+      checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,currentObject.status,currentObject.notes,currentObject.visibility,currentObject.date,currentObject.defect);
+
+
     }
 	}else {
 		defDetailsList.innerHTML ='<div class="col-md-12">'+
@@ -70,6 +54,43 @@ function fetchDefDetails(defectId){
     var errorCode = error.code;
     var errorMessage = error.message;
     alert("Error: " +errorMessage);
+  });
+}
+
+// check Image
+function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,status,notes,visibility,date,defect) {
+  var defDetailsImageURLEdit = 'https://firebasestorage.googleapis.com/v0/b/mproject-sharedb.appspot.com/o/Profile%20Picture%2Fempty.jpg?alt=media&token=572e9479-e896-4104-a90b-4a60ad70083d';
+  firebase.database().ref('/Defect add on image/' + defDetailsID).once('value').then(function(snapshot){
+    var defDetailsImageObject = snapshot.val();
+ var imagekeys = Object.keys(defDetailsImageObject);
+
+    var currentImageObject = defDetailsImageObject[imagekeys[0]];
+     
+      defDetailsImageURLEdit = currentImageObject.imgURL; 
+
+      defDetailsList.innerHTML +='<div class="col-md-6">' +
+                  '<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
+                '<h6>Defect Add On ID: ' + defDetailsID + '</h6>' +
+                '<img src="'+defDetailsImageURLEdit+'"class="img-thumbnail contentImage">' +
+                '<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+defect+'" class="text-capitalize" readonly required>' + '</h3>'+
+                '<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>' +
+                '<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h6>' +
+                //'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
+                '<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
+                '<br></br>' +
+                '<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
+                '<label id="\''+defDetailsEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsEveryoneEdit+'\'" name="\''+defDetailsID+"visibility"+'\'" checked>Everyone </label>' +
+                '<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></span>' +
+                '<br></br>' +
+                '<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defDetailsNotesEdit+'\'" value="'+notes+'"  readonly>' + '</span>' +
+                '<br></br>' +
+                '<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="btn btn-success">Show more</a>' + " " + 
+                  '</div>' +
+                '</div>';
+      }).catch(function(error){
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    alert("Error:[Project retrieve image] " +errorMessage);
   });
 }
 

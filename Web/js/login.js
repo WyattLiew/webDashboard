@@ -8,9 +8,9 @@ firebase.auth().onAuthStateChanged(function(user){
     retrieveData(currentUser);
 		//document.getElementById("user_div").style.display = "block";
 		//document.getElementById("login_div").style.display = "none";
-		//document.location.href = "progress.html";
+		// window.location='home.html';
 	}else{
-		//
+		
 	}
 });
 

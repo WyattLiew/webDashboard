@@ -12,7 +12,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchProjects(userId);
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 

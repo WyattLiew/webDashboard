@@ -22,7 +22,7 @@ UID = firebase.auth().currentUser.uid;
 
 fetchDefDetails(queryString);
 }else{
-	//
+	window.location='index.html';
 }
 });
 

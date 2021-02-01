@@ -22,7 +22,7 @@ UID = firebase.auth().currentUser.uid;
 
 fetchDefDetails(queryString);
 }else{
-	//
+	window.location='index.html';
 }
 });
 
@@ -52,18 +52,17 @@ if (vEveryone == true) {
 var selectedFile = document.querySelector('#defDetailsUploadImages').files[0];
 
 // get file name && timestamp
-var fullPath = document.getElementById("defDetailsUploadImages").files[0].name;
-var filename;
-if (fullPath) {
-    filename = fullPath + " (" + Date.now() + ")";
-}
+// var fullPath = document.getElementById("defDetailsUploadImages").files[0].name;
+// var filename;
+// if (fullPath) {
+//     filename = fullPath + " (" + Date.now() + ")";
+// }
 
 var defDetails = {
 	defect: defDetailsTitle,
 	visibility: visibility,
 	date: defDetailsDate,
 	id: defDetailsId,
-	imgURL: "",
 	notes: defDetailsNotes,
 	status: defDetailsStatus
 }
@@ -77,20 +76,20 @@ if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && select
 		defDetailsAddBtn.style.display="none";
 
 	// Upload image to firebase storage //
-	var uploadImage = defDetailsStorageRef.child(UID).child(defTitle).child(defDetailsId).child(filename).put(selectedFile);
+	// var uploadImage = defDetailsStorageRef.child(UID).child(defTitle).child(defDetailsId).child(filename).put(selectedFile);
 	
-	uploadImage.on('state_changed', function(snapshot){
+	// uploadImage.on('state_changed', function(snapshot){
 
-	}, function(error){
-		let errorMessage = error.message;
-		alert("Error!:" +errorMessage);
+	// }, function(error){
+	// 	let errorMessage = error.message;
+	// 	alert("Error!:" +errorMessage);
 		
-	}, function() {
+	// }, function() {
 		//Handle successful uploads on complete
 		//For instance, get the download URL: https// firebasestorage.googleapis.com/...
 		//var downloadURL = uploadImage.snapshot.downloadURL;
-		uploadImage.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-		defDetails.imgURL = downloadURL;
+		// uploadImage.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+		// defDetails.imgURL = downloadURL;
 
 		// save data to firebase
 		newDefDetailsRef.child(queryString).child(defDetailsId).set(defDetails,function(error) {
@@ -104,7 +103,7 @@ if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && select
 			// Reset field
 			document.getElementById('defDetailsInputForm').reset();
 			// retrieve data
-			fetchDefDetails(queryString);
+			// fetchDefDetails(queryString);
 			//alert("Save Successfully!");
 			var defDetailsAlert = document.getElementById("defDetails-green-alert1");
 			defDetailsAlert.classList.remove("hidden");
@@ -113,12 +112,14 @@ if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && select
 			defDetailsSubmitProgress.style.display="none";
 			defDetailsAddBtn.style.display="inline-block";
 		}
-	});
-	});
+	// });
+	// });
 	});
 
 	// input file
 	var selectedFiles = document.querySelector('#defDetailsUploadImages').files;
+	var count = 0;
+	var fileLength = selectedFiles.length;
 
 	for (var i = 0; i < selectedFiles.length;i++) {
 		var files = selectedFiles[i];
@@ -130,8 +131,20 @@ if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && select
 		}
 		// check file image type
 		if (selectedFiles[i].type.match('image')){
-		var uploadImages = defDetailsStorageRef.child(UID).child(defTitle).child(defDetailsId)
-		.child(filenames).put(selectedFiles[i]).then(function(snapshot){
+			//Add Image data
+			count++;
+			addImageData(defDetailsId,filenames,selectedFiles[i],count,fileLength);	
+	}
+	}
+}else{
+	alert("Please check your image type");
+} 
+}
+
+// Add Image Data
+function addImageData(defDetailsId,filenames,selectedFiles,count,fileLength) {
+	var uploadImages = defDetailsStorageRef.child(UID).child(defTitle).child(defDetailsId)
+		.child(filenames).put(selectedFiles).then(function(snapshot){
 		
 		// add imgurl to defect details json
 		var url = snapshot.ref.getDownloadURL().then(function(urls){
@@ -141,23 +154,19 @@ if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && select
 		 	// save Add on image data to firebase
 		 	defDetailsAddonImages.child(defDetailsId).child(imageId).set({
 			id: imageId,
-			imgURL: imageUrls
+			imgURL: imageUrls,
+			filename:filenames
 		}, function(error) {
 		    if (error) {
 		      alert("Error!:" +errorMessage);
 		    } else {
 		      // Data saved successfully!
+		      fetchDefDetails(queryString);
+		      selectDefDetailsImages(defDetailsId);
 		    }
 		});
 	});
 	});
-	}else{
-			alert("Please check your image type");
-		}
-	}
-}else{
-	alert("Please check your image type");
-} 
 }
 
 // Fetch defect details
@@ -165,7 +174,16 @@ function fetchDefDetails(queryString){
 	firebase.database().ref('/Defect Add On/' + queryString).once('value').then(function(snapshot){
     var defDetailsObject = snapshot.val();
 	var defDetailsList = document.getElementById('defDetailsList');
+	var defectTable = document.getElementById('defectTable');
 	defDetailsList.innerHTML = '';
+
+	defectTable.innerHTML = '<tr>'+
+    '<th>Image</th>'+
+    '<th>Title</th>'+
+    '<th>Status</th>'+
+    '<th>Date</th>'+
+    '<th>Notes</th>'+
+  '</tr>';
 
 	if (defDetailsObject){
     var keys = Object.keys(defDetailsObject);
@@ -177,7 +195,7 @@ function fetchDefDetails(queryString){
       var defDetailsTitleEdit = defDetailsID + currentObject.defect;
       var defDetailsStatusEdit = defDetailsID+currentObject.status;
       var defDetailsVisibilityEdit = defDetailsID + currentObject.visibility;
-      var defDetailsImageURLEdit = defDetailsID + currentObject.imgURL; 
+      // var defDetailsImageURLEdit = defDetailsID + currentObject.imgURL; 
       var defDetailsDateEdit = defDetailsID+currentObject.date;
       var defDetailsNotesEdit = defDetailsID+currentObject.notes+"1";
       var defDetailsSelectStatusEdit = defDetailsID + "Status";
@@ -186,25 +204,81 @@ function fetchDefDetails(queryString){
       var defDetailsEveryoneEdit = defDetailsID + "Everyone";
       var defDetailsUserOnlyEdit = defDetailsID + "Members";
 
-    defDetailsList.innerHTML +='<div class="col-md-6">' +
+      checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,currentObject.status,currentObject.notes,currentObject.visibility,currentObject.date,currentObject.defect);
+
+    // defDetailsList.innerHTML +='<div class="col-md-6">' +
+    // 							'<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
+				// 				'<h6>Defect Add On ID: ' + currentObject.id + '</h6>' +
+				// 				'<img src="'+currentObject.imgURL+'"class="img-thumbnail contentImage">' +
+				// 				'<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+currentObject.defect+'" class="text-capitalize" readonly required>' + '</h3>'+
+				// 				'<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+currentObject.status+'" class="text-capitalize" readonly required>' +
+				// 				'<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h6>' +
+				// 				//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
+				// 				'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
+				// 				'<br></br>' +
+				// 				'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(currentObject.visibility)+'" class="text-uppercase" readonly required>' + 
+				// 				'<label id="\''+defDetailsEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsEveryoneEdit+'\'" name="\''+defDetailsID+"visibility"+'\'" checked>Everyone </label>' +
+				// 				'<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></span>' +
+				// 				'<br></br>' +
+				// 				'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defDetailsNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
+				// 				'<br></br>' +
+				// 				'<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="btn btn-success">Show more</a>' + " " + 
+				// 				'<a href="#" onclick="saveEdit(\''+defDetailsID+'\', \''+defDetailsEveryoneEdit+'\',\''+defDetailsUserOnlyEdit+'\',\''+defDetailsSelectStatusEdit+'\',\''+defDetailsDateEdit+'\',\''+defDetailsNotesEdit+'\',\''+currentObject.imgURL+'\',\''+defDetailsTitleEdit+'\')" class="btn btn-success">Save</a>' + " " + 
+				// 				'<a href="#" onclick="cancelEdit(\''+defDetailsID+'\')" class="btn btn-danger">cancel</a>' + " " + 
+				// 				'<div class="btn-group action-btn">' +
+				// 				'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
+				// 				'<ul class="dropdown-menu">' +
+				// 			    '<li><a href="#" onclick="editDefDetails(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\')">Edit</a></li>'+
+				// 			    '<li role="separator" class="divider"></li>'+
+				// 			    '<li><a href="#" onclick="deleteDefDetails(\''+defDetailsID+'\')" >Delete</a></li>' +
+				// 			  	'</ul>'+
+				// 			  	'</div>' +
+				// 			  	'</div>' +
+				// 				'</div>';
+    }
+	}else {
+		defDetailsList.innerHTML ='<div class="col-md-12">'+
+								'<h4 class="text-center">No Data.' +
+								'<a class="btn btn-link" data-toggle="modal" data-target="#addDefDetails">Create one</a></h4>' +
+								'</div>';
+	}
+  }).catch(function(error){
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    alert("Error:[Defect retrieve data] " +errorMessage);
+  });
+}
+
+// check Image
+function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,status,notes,visibility,date,defect) {
+	var defDetailsImageURLEdit = 'https://firebasestorage.googleapis.com/v0/b/mproject-sharedb.appspot.com/o/Profile%20Picture%2Fempty.jpg?alt=media&token=572e9479-e896-4104-a90b-4a60ad70083d';
+	firebase.database().ref('/Defect add on image/' + defDetailsID).once('value').then(function(snapshot){
+    var defDetailsImageObject = snapshot.val();
+ var imagekeys = Object.keys(defDetailsImageObject);
+
+    var currentImageObject = defDetailsImageObject[imagekeys[0]];
+     
+    	defDetailsImageURLEdit = currentImageObject.imgURL; 
+
+    	 defDetailsList.innerHTML +='<div class="col-md-6">' +
     							'<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
-								'<h6>Defect Add On ID: ' + currentObject.id + '</h6>' +
-								'<img src="'+currentObject.imgURL+'"class="img-thumbnail contentImage">' +
-								'<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+currentObject.defect+'" class="text-capitalize" readonly required>' + '</h3>'+
-								'<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+currentObject.status+'" class="text-capitalize" readonly required>' +
+								'<h6>Defect Add On ID: ' + defDetailsID + '</h6>' +
+								'<img src="'+defDetailsImageURLEdit+'"class="img-thumbnail contentImage">' +
+								'<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+defect+'" class="text-capitalize" readonly required>' + '</h3>'+
+								'<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>' +
 								'<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h6>' +
 								//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
+								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(currentObject.visibility)+'" class="text-uppercase" readonly required>' + 
+								'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
 								'<label id="\''+defDetailsEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsEveryoneEdit+'\'" name="\''+defDetailsID+"visibility"+'\'" checked>Everyone </label>' +
 								'<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></span>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defDetailsNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
+								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defDetailsNotesEdit+'\'" value="'+notes+'"  readonly>' + '</span>' +
 								'<br></br>' +
-								'<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="btn btn-success">Show more</a>' + " " + 
-								'<a href="#" onclick="saveEdit(\''+defDetailsID+'\', \''+defDetailsEveryoneEdit+'\',\''+defDetailsUserOnlyEdit+'\',\''+defDetailsSelectStatusEdit+'\',\''+defDetailsDateEdit+'\',\''+defDetailsNotesEdit+'\',\''+currentObject.imgURL+'\',\''+defDetailsTitleEdit+'\')" class="btn btn-success">Save</a>' + " " + 
-								'<a href="#" onclick="cancelEdit(\''+defDetailsID+'\')" class="btn btn-danger">cancel</a>' + " " + 
+								'<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="a btn btn-success">Show more</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+defDetailsID+'\', \''+defDetailsEveryoneEdit+'\',\''+defDetailsUserOnlyEdit+'\',\''+defDetailsSelectStatusEdit+'\',\''+defDetailsDateEdit+'\',\''+defDetailsNotesEdit+'\',\''+defDetailsTitleEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\')" class="a btn btn-danger">cancel</a>' + " " + 
 								'<div class="btn-group action-btn">' +
 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +
@@ -215,17 +289,18 @@ function fetchDefDetails(queryString){
 							  	'</div>' +
 							  	'</div>' +
 								'</div>';
-    }
-	}else {
-		defDetailsList.innerHTML ='<div class="col-md-12">'+
-								'<h4 class="text-center">There are no Add on yet.' +
-								'<a class="btn btn-link" data-toggle="modal" data-target="#addDefDetails">Create one</a></h4>' +
-								'</div>';
-	}
-  }).catch(function(error){
+
+		defectTable.innerHTML += '<tr>'+
+     '<td width="300" height="200"><img src="'+defDetailsImageURLEdit+'" width="150" /></td>'+
+     '<td>\''+defect+'\'</td>'+
+    '<td>\''+status+'\'</td>'+
+    '<td>\''+date+'\'</td>'+
+    '<td>\''+notes+'\'</td>'+
+     '</tr>';
+			}).catch(function(error){
     var errorCode = error.code;
     var errorMessage = error.message;
-    alert("Error: " +errorMessage);
+    alert("Error:[Project retrieve image] " +errorMessage);
   });
 }
 
@@ -245,6 +320,17 @@ function deleteDefDetails(defDetailsId) {
   		.catch(function(error) {
     	alert("Remove failed: " + error.message);
   	});
+  		// Create a reference to the file to delete
+		var desertRef = defDetailsStorageRef.child(`${UID}/${defTitle}/${defDetailsId}/`)
+
+		desertRef.listAll().then(function (result) {
+            result.items.forEach(function (file) {
+              file.delete();
+            });
+        }).catch(function (error) {
+            // Handle any errors
+           alert("Remove image failed: " + error.message);
+        });
 	}
 
 }
@@ -275,7 +361,12 @@ function editDefDetails(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsSt
 }
 
 // cancel edit
-function cancelEdit(defDetailsId) {
+function cancelEdit(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsStatusView,defDetailsStatusEdit) {
+	var s = document.getElementById('\''+defDetailsStatusView+'\'');
+	s.classList.remove("hidden");
+
+	var v = document.getElementById('\''+visibility+'\'');
+	v.classList.remove("hidden");
 	var form = document.getElementById('\''+defDetailsId+'\'');
 	var ipt = form.getElementsByTagName('input');
 	var l=ipt.length;
@@ -283,7 +374,13 @@ function cancelEdit(defDetailsId) {
 		ipt[l].readOnly=true;
 	}
 	form.classList.remove("invert");
-	fetchdefDetails(queryString);
+	var vEveryoneEdit = document.getElementById('\''+vEveryone+'\'');
+	var vUserOnlyEdit = document.getElementById('\''+vUserOnly+'\'');
+	var vProgressStatus = document.getElementById('\''+defDetailsStatusEdit+'\'');
+	vEveryoneEdit.classList.add("hidden");
+	vUserOnlyEdit.classList.add("hidden");
+	vProgressStatus.classList.add("hidden");
+	// fetchDefDetails(queryString);
 }
 
 // save edit
@@ -309,7 +406,7 @@ function saveEdit(defDetailsID,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,def
 	visibility: visibility,
 	date: defDetailsDate,
 	id: defDetailsID,
-	imgURL: imageURL,
+	// imgURL: imageURL,
 	notes: defDetailsNotes,
 	status: defDetailsStatus
 }
@@ -341,7 +438,12 @@ function selectDefDetailsImages(defDetailsId){
     var keys = Object.keys(defDetailsImageObject);
 
     // Hide images //
-    defDetailsImageList.innerHTML ="";
+    defDetailsImageList.innerHTML ='<div class="form-group">'+
+                '<label for="defDetailsUploadAddOnImages">Upload Images * (Image Only)</label>'+
+                '<input type="file" class="upload-group" id="defDetailsUploadAddOnImages" required multiple>'+
+                '<br>'+
+                '<a href="#"class="btn btn-success" onclick="addDefectImages(\''+defDetailsId+'\')">'+'Add</a>'+'</div>'+'<br>' +
+             '</div>';
 
     // Show images //
     for (var i = 0; i < keys.length; i++){
@@ -349,8 +451,15 @@ function selectDefDetailsImages(defDetailsId){
      var currentObject = defDetailsImageObject[keys[i]];
 
      var defDetailsImageURLEdit = currentObject.imgURL; 
+
+     var defDetailsImageId = currentObject.id;
+
+     var defDetailsImageFilename = currentObject.filename;
     
-    defDetailsImageList.innerHTML +='<img src="'+defDetailsImageURLEdit+'" class="img-thumbnail">';
+    defDetailsImageList.innerHTML +='<div>'+
+    '<img src="'+defDetailsImageURLEdit+'" class="img-thumbnail contentImage">'+
+    '<h6>Filename: ' +defDetailsImageFilename+ '</h6>' +
+    '<a href="#"class="btn btn-danger" onclick="deleteDefectImages(\''+defDetailsId+'\',\''+defDetailsImageFilename+'\',\''+defDetailsImageId+'\',\''+keys.length+'\')">'+'Delete</a>'+'</div>'+'<br>' ;
 
 }
     
@@ -360,6 +469,57 @@ function selectDefDetailsImages(defDetailsId){
   });
 }
 
+// Add progress Image individually
+function addDefectImages(defDetailsId){
+	// input file
+	var selectedFiles = document.querySelector('#defDetailsUploadAddOnImages').files;
+	var selectedFile = document.querySelector('#defDetailsUploadAddOnImages').files[0];
+	var count = 0;
+	var fileLength = selectedFiles.length;
+
+	if (selectedFile != null && selectedFile.type.match('image')) {
+
+	for (var i = 0; i < selectedFiles.length;i++) {
+		var file = selectedFiles[i];
+		// get file name && timestamp
+		var fullPaths = document.getElementById("defDetailsUploadAddOnImages").files[i].name;
+		var filenames = "";
+		if (fullPaths) {
+		    filenames = fullPaths +" (" + Date.now() + ")";
+		}
+if (selectedFiles[i].type.match('image')){
+	//Add Image data
+	count++;
+	addImageData(defDetailsId,filenames,selectedFiles[i],count,fileLength);
+
+} else {
+	alert("Please check your image type");
+}
+}
+}else{
+	alert("Please check your image type");
+} 
+}
+
+// Delete progress Image individually
+function deleteDefectImages(defDetailsId,filename,id,keys) {
+		if (keys > 1) {
+	    // Create a reference to the file to delete
+		var desertRef = defDetailsStorageRef.child(`${UID}/${defTitle}/${defDetailsId}/${filename}`);
+		// Delete the file
+		desertRef.delete().then(() => {
+			defDetailsAddonImages.child(defDetailsId).child(id).remove();
+			fetchDefDetails(queryString);
+			selectDefDetailsImages(defDetailsId);
+		  // File deleted successfully
+		}).catch((error) => {
+		  // Uh-oh, an error occurred!
+		  alert("Remove image failed: " + error.message);
+		});
+	} else {
+		alert("Image unable to delete.")
+	}
+}
 
 // get visibility status
 function getVisibility (visibility) {

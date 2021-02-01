@@ -8,7 +8,7 @@ firebase.auth().onAuthStateChanged(function(user){
     queryDefectDatabase(UID);
     checkAdmin(UID);
 	}else{
-		//
+    window.location='index.html';
 	}
 });
 

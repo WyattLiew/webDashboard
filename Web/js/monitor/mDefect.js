@@ -11,7 +11,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchDefects(userId);
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 

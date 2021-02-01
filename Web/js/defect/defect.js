@@ -13,7 +13,7 @@ firebase.auth().onAuthStateChanged(function(user){
     
     fetchDefects(UID);
 	}else{
-		//
+		window.location='index.html';
 	}
 });
 
@@ -125,9 +125,9 @@ function fetchDefects(UID){
 								'<br></br>' +
 								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defectNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
 								'<br></br>' +
-								'<a href="#" onclick="enterDefect(\''+defectID+'\',\''+currentObject.title+'\')" class="btn btn-success">Enter</a>' + " " + 
-								'<a href="#" onclick="saveEdit(\''+defectID+'\',\''+defectTitleEdit+'\',\''+defectDescEdit+'\',\''+defectCliNameEdit+'\',\''+defectCliNumEdit+'\',\''+defectCliEmailEdit+'\',\''+defectLocationEdit+'\',\''+defectDateEdit+'\',\''+defectNotesEdit+'\')" class="btn btn-success">Save</a>' + " " + 
-								'<a href="#" onclick="cancelEdit(\''+defectID+'\')" class="btn btn-danger">cancel</a>' + " " + 
+								'<a href="#" onclick="enterDefect(\''+defectID+'\',\''+currentObject.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+defectID+'\',\''+defectTitleEdit+'\',\''+defectDescEdit+'\',\''+defectCliNameEdit+'\',\''+defectCliNumEdit+'\',\''+defectCliEmailEdit+'\',\''+defectLocationEdit+'\',\''+defectDateEdit+'\',\''+defectNotesEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+defectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
 								'<div class="btn-group action-btn">' +
 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +
