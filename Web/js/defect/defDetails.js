@@ -143,7 +143,7 @@ if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && select
 
 // Add Image Data
 function addImageData(defDetailsId,filenames,selectedFiles,count,fileLength) {
-	var uploadImages = defDetailsStorageRef.child(UID).child(defTitle).child(defDetailsId)
+	var uploadImages = defDetailsStorageRef.child(UID).child(queryString).child(defDetailsId)
 		.child(filenames).put(selectedFiles).then(function(snapshot){
 		
 		// add imgurl to defect details json
@@ -321,7 +321,7 @@ function deleteDefDetails(defDetailsId) {
     	alert("Remove failed: " + error.message);
   	});
   		// Create a reference to the file to delete
-		var desertRef = defDetailsStorageRef.child(`${UID}/${defTitle}/${defDetailsId}/`)
+		var desertRef = defDetailsStorageRef.child(`${UID}/${queryString}/${defDetailsId}/`)
 
 		desertRef.listAll().then(function (result) {
             result.items.forEach(function (file) {
@@ -384,7 +384,7 @@ function cancelEdit(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsStatus
 }
 
 // save edit
-function saveEdit(defDetailsID,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,defDetailsStatusEdit,defDetailsDateEdit,defDetailsNotesEdit,imageURL,defDetailsTitleEdit) {
+function saveEdit(defDetailsID,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,defDetailsStatusEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsTitleEdit) {
 	var form = document.getElementById('\''+defDetailsID+'\'');
 	var defDetailsEveryone = document.getElementById('\''+defDetailsEveryoneEdit+'\'').checked;
 	var defDetailsUserOnly = document.getElementById('\''+defDetailsUserOnlyEdit+'\'').checked;
@@ -505,7 +505,7 @@ if (selectedFiles[i].type.match('image')){
 function deleteDefectImages(defDetailsId,filename,id,keys) {
 		if (keys > 1) {
 	    // Create a reference to the file to delete
-		var desertRef = defDetailsStorageRef.child(`${UID}/${defTitle}/${defDetailsId}/${filename}`);
+		var desertRef = defDetailsStorageRef.child(`${UID}/${queryString}/${defDetailsId}/${filename}`);
 		// Delete the file
 		desertRef.delete().then(() => {
 			defDetailsAddonImages.child(defDetailsId).child(id).remove();

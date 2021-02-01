@@ -142,7 +142,7 @@ if (selectedFiles[i].type.match('image')){
 
 // Add Image Data
 function addImageData(progressId,filenames,selectedFiles,count,fileLength) {
-	var uploadImages = progressStorageRef.child(UID).child(projTitle).child(progressId)
+	var uploadImages = progressStorageRef.child(UID).child(queryString).child(progressId)
 		.child(filenames).put(selectedFiles).then(function(snapshot){
 			
 			// add imgurl to progress json
@@ -323,7 +323,7 @@ function deleteProgress(progressId) {
     	alert("Remove failed: " + error.message);
   	});
 		// Create a reference to the file to delete
-		var desertRef = progressStorageRef.child(`${UID}/${projTitle}/${progressId}/`)
+		var desertRef = progressStorageRef.child(`${UID}/${queryString}/${progressId}/`)
 
 		desertRef.listAll().then(function (result) {
             result.items.forEach(function (file) {
@@ -517,7 +517,7 @@ if (selectedFiles[i].type.match('image')){
 function deleteProgressImages(progressId,filename,id,keys) {
 		if (keys > 1) {
 	    // Create a reference to the file to delete
-		var desertRef = progressStorageRef.child(`${UID}/${projTitle}/${progressId}/${filename}`);
+		var desertRef = progressStorageRef.child(`${UID}/${queryString}/${progressId}/${filename}`);
 		// Delete the file
 		desertRef.delete().then(() => {
 			progressAddonImages.child(progressId).child(id).remove();

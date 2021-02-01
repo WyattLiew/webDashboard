@@ -125,7 +125,7 @@ function fetchProjects(UID){
 								'<h6>Project ID: ' + currentObject.id + '</h6>' +
 								'<h3>' + '<input id="\''+projectTitleEdit+'\'" value="'+currentObject.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
 								'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-12">' +" "+ '<input id="\''+projectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
+								'<span class="glyphicon glyphicon-time col-md-12">'+" "+ '<input id="\''+projectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
 								'<br></br>' +
 								'<span class="glyphicon glyphicon-user col-md-12">'+ " " +'<input id="\''+projectCliNameEdit+'\'" value="'+currentObject.name+'"  readonly required>' + '</span>' +
 								'<br></br>' +
