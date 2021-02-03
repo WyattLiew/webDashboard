@@ -7,6 +7,18 @@ var storage = firebase.storage();
 var defDetailsStorageRef = storage.ref("Defect Add On");
 var UID;
 
+
+//pagination
+var list = [];
+var currentDevice =1;
+var activePage = 1;
+var devicesPerPage = 20;
+var indexOfLastDevice = currentDevice * devicesPerPage;
+var indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+ var PageNumbers = [];
+ var active = activePage;
+
 // get data from defect page //
 //var queryString = decodeURIComponent(window.location.search);
 //queryString = queryString.substring(6);
@@ -161,8 +173,10 @@ function addImageData(defDetailsId,filenames,selectedFiles,count,fileLength) {
 		      alert("Error!:" +errorMessage);
 		    } else {
 		      // Data saved successfully!
+		       if(count==fileLength) {
 		      fetchDefDetails(queryString);
 		      selectDefDetailsImages(defDetailsId);
+		  }
 		    }
 		});
 	});
@@ -175,8 +189,10 @@ function fetchDefDetails(queryString){
     var defDetailsObject = snapshot.val();
 	var defDetailsList = document.getElementById('defDetailsList');
 	var defectTable = document.getElementById('defectTable');
-	defDetailsList.innerHTML = '';
 
+	list =[];
+	PageNumbers=[];
+	defDetailsList.innerHTML = '';
 	defectTable.innerHTML = '<tr>'+
     '<th>Image</th>'+
     '<th>Title</th>'+
@@ -192,19 +208,31 @@ function fetchDefDetails(queryString){
 
       var currentObject = defDetailsObject[keys[i]];
       var defDetailsID = currentObject.id;
-      var defDetailsTitleEdit = defDetailsID + currentObject.defect;
-      var defDetailsStatusEdit = defDetailsID+currentObject.status;
-      var defDetailsVisibilityEdit = defDetailsID + currentObject.visibility;
-      // var defDetailsImageURLEdit = defDetailsID + currentObject.imgURL; 
-      var defDetailsDateEdit = defDetailsID+currentObject.date;
-      var defDetailsNotesEdit = defDetailsID+currentObject.notes+"1";
-      var defDetailsSelectStatusEdit = defDetailsID + "Status";
-      var defDetailsEveryoneLabel = defDetailsID + "LEveryone";
-      var defDetailsUserOnlyLabel = defDetailsID + "LMenbers";
-      var defDetailsEveryoneEdit = defDetailsID + "Everyone";
-      var defDetailsUserOnlyEdit = defDetailsID + "Members";
+      
 
-      checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,currentObject.status,currentObject.notes,currentObject.visibility,currentObject.date,currentObject.defect);
+      var progressInfo = {
+       defDetailsID:currentObject.id,
+	 defDetailsTitleEdit:defDetailsID + currentObject.defect,
+      defDetailsStatusEdit:defDetailsID+currentObject.status,
+      defDetailsVisibilityEdit:defDetailsID + currentObject.visibility,
+      // var defDetailsImageURLEdit = defDetailsID + currentObject.imgURL; 
+      defDetailsDateEdit:defDetailsID+currentObject.date,
+      defDetailsNotesEdit:defDetailsID+currentObject.notes+"1",
+      defDetailsSelectStatusEdit:defDetailsID + "Status",
+      defDetailsEveryoneLabel:defDetailsID + "LEveryone",
+      defDetailsUserOnlyLabel:defDetailsID + "LMenbers",
+      defDetailsEveryoneEdit:defDetailsID + "Everyone",
+      defDetailsUserOnlyEdit:defDetailsID + "Members",
+      	status:currentObject.status,
+      	notes:currentObject.notes,
+      	visibility:currentObject.visibility,
+      	date:currentObject.date,
+      	defect:currentObject.defect
+	};
+
+ list.push(progressInfo);
+
+      // checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,currentObject.status,currentObject.notes,currentObject.visibility,currentObject.date,currentObject.defect);
 
     // defDetailsList.innerHTML +='<div class="col-md-6">' +
     // 							'<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
@@ -236,6 +264,32 @@ function fetchDefDetails(queryString){
 				// 			  	'</div>' +
 				// 				'</div>';
     }
+
+    var listslice = list.slice(
+     	 indexOfFirstDevice,
+      indexOfLastDevice
+     	);
+    listslice.map(function(item,index) {
+      checkImage(item.defDetailsID,item.defDetailsTitleEdit,item.defDetailsStatusEdit,item.defDetailsVisibilityEdit,item.defDetailsDateEdit,item.defDetailsNotesEdit,item.defDetailsSelectStatusEdit,item.defDetailsEveryoneLabel,item.defDetailsUserOnlyLabel,item.defDetailsEveryoneEdit,item.defDetailsUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.defect);
+   	});
+
+
+    // pagination
+    for (let i = 1; i <= Math.ceil(list.length / devicesPerPage); i++) {
+    PageNumbers.push(i);
+  }
+  	var progressPagination = document.getElementById('progressPagination');
+  	progressPagination.innerHTML = '';
+
+	PageNumbers.map(function(item,index){
+		progressPagination.innerHTML += 
+      '<li class="page-item" id="\''+item+'\'"><a class="page-link" href="#" onclick="pagination(\''+item+'\',\''+PageNumbers.length+'\')">'+item+'</a></li>';
+	});
+
+	var active = document.getElementById('\''+1+'\'');
+	active.classList.add("active");
+
+
 	}else {
 		defDetailsList.innerHTML ='<div class="col-md-12">'+
 								'<h4 class="text-center">No Data.' +
@@ -291,11 +345,11 @@ function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDet
 								'</div>';
 
 		defectTable.innerHTML += '<tr>'+
-     '<td width="300" height="200"><img src="'+defDetailsImageURLEdit+'" width="150" /></td>'+
-     '<td>\''+defect+'\'</td>'+
-    '<td>\''+status+'\'</td>'+
-    '<td>\''+date+'\'</td>'+
-    '<td>\''+notes+'\'</td>'+
+     '<td width="300" height="300"><img src="'+defDetailsImageURLEdit+'" width="150" /></td>'+
+     '<td>'+defect+'</td>'+
+    '<td>'+status+'</td>'+
+    '<td>'+date+'</td>'+
+    '<td>'+notes+'</td>'+
      '</tr>';
 			}).catch(function(error){
     var errorCode = error.code;
@@ -530,4 +584,38 @@ function getVisibility (visibility) {
 	}else{
 		return y;
 	}
+}
+
+function pagination(number,totalPage) {
+	//change page number
+	currentDevice = number;
+	activePage = number;
+
+for (var i = 1; i <= totalPage; i++) {
+	if(i==number){
+	var active = document.getElementById('\''+number+'\'');
+	active.classList.add("active");
+	}else {
+ 	var active = document.getElementById('\''+i+'\'');
+	active.classList.remove("active");
+	}
+}
+
+	//clear html
+	defDetailsList.innerHTML ='';
+
+	//calculate page
+	indexOfLastDevice = currentDevice * devicesPerPage;
+	indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+	//re-run html
+	var listslice = list.slice(
+     	indexOfFirstDevice,
+      	indexOfLastDevice
+     	);
+
+    listslice.map(function(item,index) {
+      checkImage(item.defDetailsID,item.defDetailsTitleEdit,item.defDetailsStatusEdit,item.defDetailsVisibilityEdit,item.defDetailsDateEdit,item.defDetailsNotesEdit,item.defDetailsSelectStatusEdit,item.defDetailsEveryoneLabel,item.defDetailsUserOnlyLabel,item.defDetailsEveryoneEdit,item.defDetailsUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.defect);
+   	});
+
 }

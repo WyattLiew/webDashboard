@@ -7,6 +7,17 @@ var storage = firebase.storage();
 var progressStorageRef = storage.ref("Projects Add On");
 var UID;
 
+//pagination
+var list = [];
+var currentDevice =1;
+var activePage = 1;
+var devicesPerPage = 20;
+var indexOfLastDevice = currentDevice * devicesPerPage;
+var indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+ var PageNumbers = [];
+ var active = activePage;
+
 // get data from project page //
 //var queryString = decodeURIComponent(window.location.search);
 //queryString = queryString.substring(6);
@@ -176,9 +187,14 @@ function fetchProgress(queryString){
 	firebase.database().ref('/Projects Add On/' + queryString).once('value').then(function(snapshot){
     var progressObject = snapshot.val();
 	var progressList = document.getElementById('progressList');
+	var progressPagination = document.getElementById('progressPagination');
 	var progressTable = document.getElementById('progressTable');
+	var progressInfo = {};
 	
+	list =[];
+	PageNumbers=[];
 	progressList.innerHTML = '';
+	progressPagination.innerHTML = "";
 	progressTable.innerHTML = '<tr>'+
     '<th>Image</th>'+
     '<th>Status</th>'+
@@ -190,22 +206,43 @@ function fetchProgress(queryString){
     var keys = Object.keys(progressObject);
 
     for (var i = 0; i < keys.length; i++){
-   
+
       var currentObject = progressObject[keys[i]];
 
       var progressID = currentObject.id;
-      var progressStatusEdit = progressID+currentObject.status;
-      var progressVisibilityEdit = progressID + currentObject.visibility;
-      // var progressImageURLEdit = progressID + currentObject.imgURL; 
-      var progressDateEdit = progressID+currentObject.date;
-      var progressNotesEdit = progressID+currentObject.notes+"1";
-      var progressSelectStatusEdit = progressID + "Status";
-      var progressEveryoneLabel = progressID + "LEveryone";
-      var progressUserOnlyLabel = progressID + "LMembers";
-      var progressEveryoneEdit = progressID + "Everyone";
-      var progressUserOnlyEdit = progressID + "Members";
+      // var progressStatusEdit = progressID+currentObject.status;
+      // var progressVisibilityEdit = progressID + currentObject.visibility;
+      // // var progressImageURLEdit = progressID + currentObject.imgURL; 
+      // var progressDateEdit = progressID+currentObject.date;
+      // var progressNotesEdit = progressID+currentObject.notes+"1";
+      // var progressSelectStatusEdit = progressID + "Status";
+      // var progressEveryoneLabel = progressID + "LEveryone";
+      // var progressUserOnlyLabel = progressID + "LMembers";
+      // var progressEveryoneEdit = progressID + "Everyone";
+      // var progressUserOnlyEdit = progressID + "Members";
 
-      checkImage(progressID,progressStatusEdit,progressVisibilityEdit,progressDateEdit,progressNotesEdit,progressSelectStatusEdit,progressEveryoneLabel,progressUserOnlyLabel,progressEveryoneEdit,progressUserOnlyEdit,currentObject.status,currentObject.notes,currentObject.visibility,currentObject.date);
+      var progressInfo = {
+		progressID:currentObject.id,
+      	progressStatusEdit:progressID+currentObject.status,
+      	progressVisibilityEdit:progressID + currentObject.visibility,
+      // var progressImageURLEdit = progressID + currentObject.imgURL; 
+      	progressDateEdit:progressID+currentObject.date,
+      	progressNotesEdit:progressID+currentObject.notes+"1",
+      	progressSelectStatusEdit:progressID + "Status",
+      	progressEveryoneLabel:progressID + "LEveryone",
+      	progressUserOnlyLabel:progressID + "LMembers",
+      	progressEveryoneEdit:progressID + "Everyone",
+      	progressUserOnlyEdit:progressID + "Members",
+      	status:currentObject.status,
+      	notes:currentObject.notes,
+      	visibility:currentObject.visibility,
+      	date:currentObject.date,
+	};
+
+ list.push(progressInfo);
+
+
+      // checkImage(progressID,progressStatusEdit,progressVisibilityEdit,progressDateEdit,progressNotesEdit,progressSelectStatusEdit,progressEveryoneLabel,progressUserOnlyLabel,progressEveryoneEdit,progressUserOnlyEdit,currentObject.status,currentObject.notes,currentObject.visibility,currentObject.date);
 
 // progressList.innerHTML +='<div class="col-md-6">' +
 //     							'<div class="well box-style-2" id="\''+progressID+'\'">'+
@@ -237,6 +274,29 @@ function fetchProgress(queryString){
 // 								'</div>';
 
     }
+
+     var listslice = list.slice(
+     	 indexOfFirstDevice,
+      indexOfLastDevice
+     	);
+    listslice.map(function(item,index) {
+   		checkImage(item.progressID,item.progressStatusEdit,item.progressVisibilityEdit,item.progressDateEdit,item.progressNotesEdit,item.progressSelectStatusEdit,item.progressEveryoneLabel,item.progressUserOnlyLabel,item.progressEveryoneEdit,item.progressUserOnlyEdit,item.status,item.notes,item.visibility,item.date);
+   	});
+
+
+    // pagination
+    for (let i = 1; i <= Math.ceil(list.length / devicesPerPage); i++) {
+    PageNumbers.push(i);
+  }
+
+	PageNumbers.map(function(item,index){
+		progressPagination.innerHTML += 
+      '<li class="page-item" id="\''+item+'\'"><a class="page-link" href="#" onclick="pagination(\''+item+'\',\''+PageNumbers.length+'\')">'+item+'</a></li>';
+	});
+
+	var active = document.getElementById('\''+1+'\'');
+	active.classList.add("active");
+
 	}else {
 		progressList.innerHTML ='<div class="col-md-12">'+
 								'<h4 class="text-center">No Data.' +
@@ -256,7 +316,7 @@ function checkImage(progressID,progressStatusEdit,progressVisibilityEdit,progres
 	firebase.database().ref('/Project add on image/' + progressID).once('value').then(function(snapshot){
  var progressImageObject = snapshot.val();
  var imagekeys = Object.keys(progressImageObject);
-
+ 
     var currentImageObject = progressImageObject[imagekeys[0]];
      
     progressImageURLEdit = currentImageObject.imgURL; 
@@ -292,10 +352,10 @@ function checkImage(progressID,progressStatusEdit,progressVisibilityEdit,progres
 
 			progressTable.innerHTML += 
   '<tr>'+
-     '<td width="300" height="200"><img src="'+progressImageURLEdit+'" width="150" /></td>'+
-    '<td>\''+status+'\'</td>'+
-    '<td>\''+date+'\'</td>'+
-    '<td>\''+notes+'\'</td>'+
+     '<td width="300" height="300"><img src="'+progressImageURLEdit+'" width="150" /></td>'+
+    '<td>'+status+'</td>'+
+    '<td>'+date+'</td>'+
+    '<td>'+notes+'</td>'+
      '</tr>';
 
 
@@ -542,4 +602,38 @@ function getVisibility (visibility) {
 	}else{
 		return y;
 	}
+}
+
+function pagination(number,totalPage) {
+	//change page number
+	currentDevice = number;
+	activePage = number;
+
+for (var i = 1; i <= totalPage; i++) {
+	if(i==number){
+	var active = document.getElementById('\''+number+'\'');
+	active.classList.add("active");
+	}else {
+ 	var active = document.getElementById('\''+i+'\'');
+	active.classList.remove("active");
+	}
+}
+
+	//clear html
+	progressList.innerHTML ='';
+
+	//calculate page
+	indexOfLastDevice = currentDevice * devicesPerPage;
+	indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+	//re-run html
+	var listslice = list.slice(
+     	indexOfFirstDevice,
+      	indexOfLastDevice
+     	);
+
+    listslice.map(function(item,index) {
+   		checkImage(item.progressID,item.progressStatusEdit,item.progressVisibilityEdit,item.progressDateEdit,item.progressNotesEdit,item.progressSelectStatusEdit,item.progressEveryoneLabel,item.progressUserOnlyLabel,item.progressEveryoneEdit,item.progressUserOnlyEdit,item.status,item.notes,item.visibility,item.date);
+   	});
+
 }
