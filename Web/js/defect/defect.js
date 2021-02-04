@@ -6,6 +6,17 @@ var newDefDetailsRef = db.ref("Defect Add On");
 var defDetailsAddonImages = db.ref("Defect add on image"); 
 var UID;
 
+//pagination
+var list = [];
+var currentDevice =1;
+var activePage = 1;
+var devicesPerPage = 20;
+var indexOfLastDevice = currentDevice * devicesPerPage;
+var indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+ var PageNumbers = [];
+ var active = activePage;
+
 firebase.auth().onAuthStateChanged(function(user){
 	if (user) {
 		//user is signed in
@@ -35,24 +46,24 @@ projAddBtn = document.getElementById("add-btn");
 
 function saveDefect(e){
 	var defTitle = document.getElementById('defectTitleInput').value;
-	var defDesc = document.getElementById('defectDescInput').value;
+	// var defDesc = document.getElementById('defectDescInput').value;
 	var defCliName = document.getElementById('defectCliNameInput').value;
 	var defCliNum = document.getElementById('defectCliNumInput').value;
 	var defCliEmail = document.getElementById('defectCliEmailInput').value;
 	var defLocation = document.getElementById('defectLocationInput').value;
 	var defDate = document.getElementById('defectDateInput').value;
-	var defNotes = document.getElementById('defectNotesInput').value;
+	// var defNotes = document.getElementById('defectNotesInput').value;
 	var defectId = newDefectRef.push().key;
 	
 
 	var defect = {
 		date: defDate,
-		description: defDesc,
+		// description: defDesc,
 		email: defCliEmail,
 		id: defectId,
 		location: defLocation,
 		name: defCliName,
-		notes: defNotes,
+		// notes: defNotes,
 		number: defCliNum,
 		title: defTitle
 	}
@@ -90,6 +101,11 @@ function fetchDefects(UID){
 	firebase.database().ref('/Pending/' + UID).once('value').then(function(snapshot){
     var defectObject = snapshot.val();
 	var defectList = document.getElementById('defectList');
+	var progressPagination = document.getElementById('progressPagination');
+
+	list =[];
+	PageNumbers=[];
+	progressPagination.innerHTML = "";
 	defectList.innerHTML = '';
 
 	if (defectObject){
@@ -99,46 +115,134 @@ function fetchDefects(UID){
 
       var currentObject = defectObject[keys[i]];
       var defectID = currentObject.id;
-      var defectTitleEdit = defectID+currentObject.title;
-      var defectDescEdit = defectID+currentObject.description+"1";
-      var defectCliNameEdit = defectID+currentObject.name;
-      var defectCliNumEdit = defectID+currentObject.number;
-      var defectCliEmailEdit = defectID+currentObject.email;
-      var defectLocationEdit = defectID+currentObject.location;
-      var defectDateEdit = defectID+currentObject.date;
-      var defectNotesEdit = defectID+currentObject.notes+"1";
 
-    defectList.innerHTML +='<div class="col-md-6">' +
-    							'<div class="well box-style-2" id="\''+defectID+'\'">'+
-								'<h6>Defect ID: ' + currentObject.id + '</h6>' +
-								'<h3>' + '<input id="\''+defectTitleEdit+'\'" value="'+currentObject.title+'" class="text-capitalize title-size" readonly required>' + '</h3>'+
-								'<h5>' + "Description: " + '<input id="\''+defectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
+      var info = {
+      	defectID:currentObject.id,
+      defectTitleEdit:defectID+currentObject.title,
+      // var projectDescEdit = projectID+currentObject.description+"1";
+      defectCliNameEdit:defectID+currentObject.name,
+      defectCliNumEdit:defectID+currentObject.number,
+      defectCliEmailEdit:defectID+currentObject.email,
+      defectLocationEdit:defectID+currentObject.location,
+      defectDateEdit:defectID+currentObject.date,
+      // var projectNotesEdit = projectID+currentObject.notes+"1";
+      	name:currentObject.name,
+      	number:currentObject.number,
+      	email:currentObject.email,
+      	date:currentObject.date,
+      	location:currentObject.location,
+      	title:currentObject.title
+	};
+
+       list.push(info);
+
+      // defectList.innerHTML +='<div class="col-md-6">' +
+    		// 					'<div class="well box-style-2" id="\''+defectID+'\'">'+
+						// 		'<h6>Defect ID: ' + currentObject.id + '</h6>' +
+						// 		'<h3>' + '<input id="\''+defectTitleEdit+'\'" value="'+currentObject.title+'" class="text-capitalize title-size" readonly required>' + '</h3>'+
+						// 		// '<h5>' + "Description: " + '<input id="\''+defectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
+						// 		'<input id="\''+defectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + 
+						// 		'<br></br>' +
+						// 		'<div>'+
+						// 		'<p>'+
+						// 		'<a data-toggle="collapse" href="'+"#"+defectID+defectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
+						// 		'</p>'+
+						// 		'<div class="collapse" id="'+defectID+defectID+'">'+
+  				// 				'<div class="card card-body">'+
+  				// 				'<span class="glyphicon glyphicon-user"></span>' + " " +''+
+  				// 				'<input id="\''+defectCliNameEdit+'\'" value="'+currentObject.name+'"  readonly required>'+
+  				// 				'<br></br>' +
+  				// 				'<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
+  				// 				'<input id="\''+defectCliNumEdit+'\'" type="number" value="'+currentObject.number+'" readonly required>'+
+  				// 				'<br></br>' +
+  				// 				'<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
+  				// 				'<input id="\''+defectCliEmailEdit+'\'" type="email" value="'+currentObject.email+'"  readonly required>' + "</span>" +
+  				// 				'<br></br>' +
+  				// 				'<span class="glyphicon glyphicon-flag"></span>' + " " +''+
+  				// 				'<input id="\''+defectLocationEdit+'\'" value="'+currentObject.location+'"  readonly required>' + '</span>' +
+  				// 				'<br></br>' +
+  				// 				'</div>'+
+						// 		'</div>'+
+						// 		'</div>'+
+						// 		'<a href="#" onclick="enterDefect(\''+defectID+'\',\''+currentObject.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
+						// 		'<a href="#" onclick="saveEdit(\''+defectID+'\',\''+defectTitleEdit+'\',\''+defectCliNameEdit+'\',\''+defectCliNumEdit+'\',\''+defectCliEmailEdit+'\',\''+defectLocationEdit+'\',\''+defectDateEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+						// 		'<a href="#" onclick="cancelEdit(\''+defectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+						// 		'<div class="b btn-group action-btn">' +
+						// 		'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
+						// 		'<ul class="dropdown-menu">' +
+						// 	    '<li><a href="#" onclick="editDefect(\''+defectID+'\')">Edit</a></li>'+
+						// 	    '<li role="separator" class="divider"></li>'+
+						// 	    '<li><a href="#" onclick="deleteDefect(\''+defectID+'\')" >Delete</a></li>' +
+						// 	  	'</ul>'+
+						// 	  	'</div>' +
+						// 	  	'</div>' +
+						// 		'</div>';
+    }
+
+     var listslice = list.slice(
+     	 indexOfFirstDevice,
+      indexOfLastDevice
+     	);
+    listslice.map(function(item,index) {
+		defectList.innerHTML +='<div class="col-md-6">' +
+    							'<div class="well box-style-2" id="\''+item.defectID+'\'">'+
+								'<h6>Defect ID: ' + item.defectID + '</h6>' +
+								'<h3>' + '<input id="\''+item.defectTitleEdit+'\'" value="'+item.title+'" class="text-capitalize title-size" readonly required>' + '</h3>'+
+								// '<h5>' + "Description: " + '<input id="\''+defectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
+								'<input id="\''+item.defectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-user col-md-6 ">'+ " " +'<input id="\''+defectCliNameEdit+'\'" value="'+currentObject.name+'"  readonly required>' + '</span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-earphone col-md-6">' + " " +'<input id="\''+defectCliNumEdit+'\'" type="number" value="'+currentObject.number+'" readonly required>' + ' </span>'+
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-envelope col-md-6">' + " " +'<input id="\''+defectCliEmailEdit+'\'" type="email" value="'+currentObject.email+'"  readonly required>' + "</span>" +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-flag col-md-6">' + " " +'<input id="\''+defectLocationEdit+'\'" value="'+currentObject.location+'"  readonly required>' + '</span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defectNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
-								'<br></br>' +
-								'<a href="#" onclick="enterDefect(\''+defectID+'\',\''+currentObject.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
-								'<a href="#" onclick="saveEdit(\''+defectID+'\',\''+defectTitleEdit+'\',\''+defectDescEdit+'\',\''+defectCliNameEdit+'\',\''+defectCliNumEdit+'\',\''+defectCliEmailEdit+'\',\''+defectLocationEdit+'\',\''+defectDateEdit+'\',\''+defectNotesEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
-								'<a href="#" onclick="cancelEdit(\''+defectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
-								'<div class="btn-group action-btn">' +
+								'<div>'+
+								'<p>'+
+								'<a data-toggle="collapse" href="'+"#"+item.defectID+item.defectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
+								'</p>'+
+								'<div class="collapse" id="'+item.defectID+item.defectID+'">'+
+  								'<div class="card card-body">'+
+  								'<span class="glyphicon glyphicon-user"></span>' + " " +''+
+  								'<input id="\''+item.defectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
+  								'<input id="\''+item.defectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
+  								'<input id="\''+item.defectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-flag"></span>' + " " +''+
+  								'<input id="\''+item.defectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
+  								'<br></br>' +
+  								'</div>'+
+								'</div>'+
+								'</div>'+
+								'<a href="#" onclick="enterDefect(\''+item.defectID+'\',\''+item.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+item.defectID+'\',\''+item.defectTitleEdit+'\',\''+item.defectCliNameEdit+'\',\''+item.defectCliNumEdit+'\',\''+item.defectCliEmailEdit+'\',\''+item.defectLocationEdit+'\',\''+item.defectDateEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+item.defectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+								'<div class="b btn-group action-btn">' +
 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +
-							    '<li><a href="#" onclick="editDefect(\''+defectID+'\')">Edit</a></li>'+
+							    '<li><a href="#" onclick="editDefect(\''+item.defectID+'\')">Edit</a></li>'+
 							    '<li role="separator" class="divider"></li>'+
-							    '<li><a href="#" onclick="deleteDefect(\''+defectID+'\')" >Delete</a></li>' +
+							    '<li><a href="#" onclick="deleteDefect(\''+item.defectID+'\')" >Delete</a></li>' +
 							  	'</ul>'+
 							  	'</div>' +
 							  	'</div>' +
 								'</div>';
-    }
+
+
+   	});
+
+
+    // pagination
+    for (let i = 1; i <= Math.ceil(list.length / devicesPerPage); i++) {
+    PageNumbers.push(i);
+  }
+
+	PageNumbers.map(function(item,index){
+		progressPagination.innerHTML += 
+      '<li class="page-item" id="\''+item+'\'"><a class="page-link" href="#" onclick="pagination(\''+item+'\',\''+PageNumbers.length+'\')">'+item+'</a></li>';
+	});
+
+	var active = document.getElementById('\''+1+'\'');
+	active.classList.add("active");
+
     }else {
 		defectList.innerHTML ='<div class="col-md-12">'+
 								'<h4 class="text-center">There are no defect yet.' +
@@ -176,6 +280,10 @@ function deleteDefect(defId) {
 
 function editDefect(defId) {
 	var form = document.getElementById('\''+defId+'\'');
+
+	var client = document.getElementById(`${defId+defId}`);
+	client.classList.add("in");
+
 	var ipt = form.getElementsByTagName('input');
 	var l=ipt.length;
 	while (l--) {
@@ -195,28 +303,28 @@ function cancelEdit(defId) {
 	fetchDefects(UID);
 }
 
-function saveEdit(defId,defectTitleEdit,defectDescEdit,defectCliNameEdit,defectCliNumEdit,defectCliEmailEdit,
-	defectLocationEdit,defectDateEdit,defectNotesEdit) {
+function saveEdit(defId,defectTitleEdit,defectCliNameEdit,defectCliNumEdit,defectCliEmailEdit,
+	defectLocationEdit,defectDateEdit) {
 	var UID = firebase.auth().currentUser.uid;
 	var form = document.getElementById('\''+defId+'\'');
 	var defTitle = document.getElementById('\''+defectTitleEdit+'\'').value;
-	var defDesc = document.getElementById('\''+defectDescEdit+'\'').value;
+	// var defDesc = document.getElementById('\''+defectDescEdit+'\'').value;
 	var defCliName = document.getElementById('\''+defectCliNameEdit+'\'').value;
 	var defCliNum = document.getElementById('\''+defectCliNumEdit+'\'').value;
 	var defCliEmail = document.getElementById('\''+defectCliEmailEdit+'\'').value;
 	var defLocation = document.getElementById('\''+defectLocationEdit+'\'').value;
 	var defDate = document.getElementById('\''+defectDateEdit+'\'').value;
-	var defNotes = document.getElementById('\''+defectNotesEdit+'\'').value;
+	// var defNotes = document.getElementById('\''+defectNotesEdit+'\'').value;
 
 
 	var defect = {
 		date: defDate,
-		description: defDesc,
+		// description: defDesc,
 		email: defCliEmail,
 		id: defId,
 		location: defLocation,
 		name: defCliName,
-		notes: defNotes,
+		// notes: defNotes,
 		number: defCliNum,
 		title: defTitle
 	}
@@ -263,4 +371,77 @@ function enterDefect(defId,defTitle) {
 
     location.href = "defectAddOnList.html" ;
     
+}
+
+function pagination(number,totalPage) {
+	//change page number
+	currentDevice = number;
+	activePage = number;
+
+for (var i = 1; i <= totalPage; i++) {
+	if(i==number){
+	var active = document.getElementById('\''+number+'\'');
+	active.classList.add("active");
+	}else {
+ 	var active = document.getElementById('\''+i+'\'');
+	active.classList.remove("active");
+	}
+}
+
+	//clear html
+	defectList.innerHTML ='';
+
+	//calculate page
+	indexOfLastDevice = currentDevice * devicesPerPage;
+	indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+	//re-run html
+	var listslice = list.slice(
+     	indexOfFirstDevice,
+      	indexOfLastDevice
+     	);
+
+    listslice.map(function(item,index) {
+defectList.innerHTML +='<div class="col-md-6">' +
+    							'<div class="well box-style-2" id="\''+item.defectID+'\'">'+
+								'<h6>Defect ID: ' + item.defectID + '</h6>' +
+								'<h3>' + '<input id="\''+item.defectTitleEdit+'\'" value="'+item.title+'" class="text-capitalize title-size" readonly required>' + '</h3>'+
+								// '<h5>' + "Description: " + '<input id="\''+defectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
+								'<input id="\''+item.defectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
+								'<br></br>' +
+								'<div>'+
+								'<p>'+
+								'<a data-toggle="collapse" href="'+"#"+item.defectID+item.defectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
+								'</p>'+
+								'<div class="collapse" id="'+item.defectID+item.defectID+'">'+
+  								'<div class="card card-body">'+
+  								'<span class="glyphicon glyphicon-user"></span>' + " " +''+
+  								'<input id="\''+item.defectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
+  								'<input id="\''+item.defectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
+  								'<input id="\''+item.defectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-flag"></span>' + " " +''+
+  								'<input id="\''+item.defectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
+  								'<br></br>' +
+  								'</div>'+
+								'</div>'+
+								'</div>'+
+								'<a href="#" onclick="enterDefect(\''+item.defectID+'\',\''+item.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+item.defectID+'\',\''+item.defectTitleEdit+'\',\''+item.defectCliNameEdit+'\',\''+item.defectCliNumEdit+'\',\''+item.defectCliEmailEdit+'\',\''+item.defectLocationEdit+'\',\''+item.defectDateEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+item.defectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+								'<div class="b btn-group action-btn">' +
+								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
+								'<ul class="dropdown-menu">' +
+							    '<li><a href="#" onclick="editDefect(\''+item.defectID+'\')">Edit</a></li>'+
+							    '<li role="separator" class="divider"></li>'+
+							    '<li><a href="#" onclick="deleteDefect(\''+item.defectID+'\')" >Delete</a></li>' +
+							  	'</ul>'+
+							  	'</div>' +
+							  	'</div>' +
+								'</div>';
+});
 }

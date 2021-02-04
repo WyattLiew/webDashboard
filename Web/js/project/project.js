@@ -7,6 +7,17 @@ var progressAddonImages = db.ref("Project add on image");
 var newClientRef = db.ref("Clients");
 var UID;
 
+//pagination
+var list = [];
+var currentDevice =1;
+var activePage = 1;
+var devicesPerPage = 20;
+var indexOfLastDevice = currentDevice * devicesPerPage;
+var indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+ var PageNumbers = [];
+ var active = activePage;
+
 firebase.auth().onAuthStateChanged(function(user){
 	if (user) {
 		//user is signed in
@@ -36,25 +47,25 @@ projAddBtn = document.getElementById("add-btn");
 
 function saveProject(e){
 	var projTitle = document.getElementById('projectTitleInput').value;
-	var projDesc = document.getElementById('projectDescInput').value;
+	// var projDesc = document.getElementById('projectDescInput').value;
 	var projCliName = document.getElementById('projectCliNameInput').value;
 	var projCliNum = document.getElementById('projectCliNumInput').value;
 	var projCliEmail = document.getElementById('projectCliEmailInput').value;
 	var projLocation = document.getElementById('projectLocationInput').value;
 	var projDate = document.getElementById('projectDateInput').value;
-	var projNotes = document.getElementById('projectNotesInput').value;
+	// var projNotes = document.getElementById('projectNotesInput').value;
 	var projectId = newProjectRef.push().key;
 	var clientId = newClientRef.push().key;
 
 	var project = {
 		clientID: clientId,
 		date: projDate,
-		description: projDesc,
+		// description: projDesc,
 		email: projCliEmail,
 		id: projectId,
 		location: projLocation,
 		name: projCliName,
-		notes: projNotes,
+		// notes: projNotes,
 		number: projCliNum,
 		title: projTitle
 	}
@@ -102,6 +113,11 @@ function fetchProjects(UID){
 	firebase.database().ref('/Projects/' + UID).once('value').then(function(snapshot){
     var projectObject = snapshot.val();
 	var projectList = document.getElementById('projectList');
+	var progressPagination = document.getElementById('progressPagination');
+
+	list =[];
+	PageNumbers=[];
+	progressPagination.innerHTML = "";
 	projectList.innerHTML = '';
 	if (projectObject){
     var keys = Object.keys(projectObject);
@@ -110,47 +126,91 @@ function fetchProjects(UID){
 
       var currentObject = projectObject[keys[i]];
       var projectID = currentObject.id;
-      var clientId = currentObject.clientID;
-      var projectTitleEdit = projectID+currentObject.title;
-      var projectDescEdit = projectID+currentObject.description+"1";
-      var projectCliNameEdit = projectID+currentObject.name;
-      var projectCliNumEdit = projectID+currentObject.number;
-      var projectCliEmailEdit = projectID+currentObject.email;
-      var projectLocationEdit = projectID+currentObject.location;
-      var projectDateEdit = projectID+currentObject.date;
-      var projectNotesEdit = projectID+currentObject.notes+"1";
+      
 
-    projectList.innerHTML +='<div class="col-md-6">' +
-    							'<div class="well box-style-2" id="\''+projectID+'\'">'+
-								'<h6>Project ID: ' + currentObject.id + '</h6>' +
-								'<h3>' + '<input id="\''+projectTitleEdit+'\'" value="'+currentObject.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
-								'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-12">'+" "+ '<input id="\''+projectDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
+      var info = {
+      	projectID:currentObject.id,
+		clientId:currentObject.clientID,
+      projectTitleEdit:projectID+currentObject.title,
+      // var projectDescEdit = projectID+currentObject.description+"1";
+      projectCliNameEdit:projectID+currentObject.name,
+      projectCliNumEdit:projectID+currentObject.number,
+      projectCliEmailEdit:projectID+currentObject.email,
+      projectLocationEdit:projectID+currentObject.location,
+      projectDateEdit:projectID+currentObject.date,
+      // var projectNotesEdit = projectID+currentObject.notes+"1";
+      	name:currentObject.name,
+      	number:currentObject.number,
+      	email:currentObject.email,
+      	date:currentObject.date,
+      	location:currentObject.location,
+      	title:currentObject.title
+	};
+
+       list.push(info);
+    }
+
+    var listslice = list.slice(
+     	 indexOfFirstDevice,
+      indexOfLastDevice
+     	);
+    listslice.map(function(item,index) {
+    	projectList.innerHTML +='<div class="col-md-4">' +
+    							'<div class="well box-style-2" id="\''+item.projectID+'\'">'+
+								'<h6>Project ID: ' + item.projectID + '</h6>' +
+								'<h3>' + '<input id="\''+item.projectTitleEdit+'\'" value="'+item.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
+								'<input id="\''+item.projectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-user col-md-12">'+ " " +'<input id="\''+projectCliNameEdit+'\'" value="'+currentObject.name+'"  readonly required>' + '</span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-earphone col-md-12">' + " " +'<input id="\''+projectCliNumEdit+'\'" type="number" value="'+currentObject.number+'" readonly required>' + ' </span>'+
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-envelope col-md-12">' + " " +'<input id="\''+projectCliEmailEdit+'\'" type="email" value="'+currentObject.email+'"  readonly required>' + "</span>" +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-flag col-md-12">' + " " +'<input id="\''+projectLocationEdit+'\'" value="'+currentObject.location+'"  readonly required>' + '</span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment col-md-12">' + " " +'<input id="\''+projectNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
-								'<br></br>' +
-								'<a href="#" onclick="enterProject(\''+projectID+'\',\''+currentObject.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
-								'<a href="#" onclick="saveEdit(\''+projectID+'\', \''+clientId+'\',\''+projectTitleEdit+'\',\''+projectDescEdit+'\',\''+projectCliNameEdit+'\',\''+projectCliNumEdit+'\',\''+projectCliEmailEdit+'\',\''+projectLocationEdit+'\',\''+projectDateEdit+'\',\''+projectNotesEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
-								'<a href="#" onclick="cancelEdit(\''+projectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
-								'<div class="btn-group action-btn">' +
+								'<div>'+
+								'<p>'+
+								'<a data-toggle="collapse" href="'+"#"+item.projectID+item.projectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
+								'</p>'+
+								'<div class="collapse" id="'+item.projectID+item.projectID+'">'+
+  								'<div class="card card-body">'+
+  								'<span class="glyphicon glyphicon-user"></span>' + " " +''+
+  								'<input id="\''+item.projectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
+  								'<input id="\''+item.projectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
+  								'<input id="\''+item.projectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-flag"></span>' + " " +''+
+  								'<input id="\''+item.projectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
+  								'<br></br>' +
+  								'</div>'+
+								'</div>'+
+								'</div>'+
+								'<a href="#" onclick="enterProject(\''+item.projectID+'\',\''+item.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+item.projectID+'\', \''+item.clientId+'\',\''+item.projectTitleEdit+'\',\''+item.projectCliNameEdit+'\',\''+item.projectCliNumEdit+'\',\''+item.projectCliEmailEdit+'\',\''+item.projectLocationEdit+'\',\''+item.projectDateEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+item.projectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+								'<div class="b btn-group action-btn">' +
 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +
-							    '<li><a href="#" onclick="editProject(\''+projectID+'\')">Edit</a></li>'+
+							    '<li><a href="#" onclick="editProject(\''+item.projectID+'\')">Edit</a></li>'+
 							    '<li role="separator" class="divider"></li>'+
-							    '<li><a href="#" onclick="deleteProject(\''+projectID+'\')" >Delete</a></li>' +
+							    '<li><a href="#" onclick="deleteProject(\''+item.projectID+'\')" >Delete</a></li>' +
 							  	'</ul>'+
 							  	'</div>' +
 							  	'</div>' +
 								'</div>';
-    }
+   	});
+
+
+    // pagination
+    for (let i = 1; i <= Math.ceil(list.length / devicesPerPage); i++) {
+    PageNumbers.push(i);
+  }
+
+	PageNumbers.map(function(item,index){
+		progressPagination.innerHTML += 
+      '<li class="page-item" id="\''+item+'\'"><a class="page-link" href="#" onclick="pagination(\''+item+'\',\''+PageNumbers.length+'\')">'+item+'</a></li>';
+	});
+
+	var active = document.getElementById('\''+1+'\'');
+	active.classList.add("active");
+
     }else {
 		projectList.innerHTML ='<div class="col-md-12">'+
 								'<h4 class="text-center">There are no project yet.' +
@@ -189,6 +249,10 @@ function deleteProject(projId) {
 
 function editProject(projId) {
 	var form = document.getElementById('\''+projId+'\'');
+
+	var client = document.getElementById(`${projId+projId}`);
+	client.classList.add("in");
+
 	var ipt = form.getElementsByTagName('input');
 	var l=ipt.length;
 	while (l--) {
@@ -208,29 +272,29 @@ function cancelEdit(projId) {
 	fetchProjects(UID);
 }
 
-function saveEdit(projId,clientId,projectTitleEdit,projectDescEdit,projectCliNameEdit,projectCliNumEdit,projectCliEmailEdit,
-	projectLocationEdit,projectDateEdit,projectNotesEdit) {
+function saveEdit(projId,clientId,projectTitleEdit,projectCliNameEdit,projectCliNumEdit,projectCliEmailEdit,
+	projectLocationEdit,projectDateEdit) {
 	var UID = firebase.auth().currentUser.uid;
 	var form = document.getElementById('\''+projId+'\'');
 	var projTitle = document.getElementById('\''+projectTitleEdit+'\'').value;
-	var projDesc = document.getElementById('\''+projectDescEdit+'\'').value;
+	// var projDesc = document.getElementById('\''+projectDescEdit+'\'').value;
 	var projCliName = document.getElementById('\''+projectCliNameEdit+'\'').value;
 	var projCliNum = document.getElementById('\''+projectCliNumEdit+'\'').value;
 	var projCliEmail = document.getElementById('\''+projectCliEmailEdit+'\'').value;
 	var projLocation = document.getElementById('\''+projectLocationEdit+'\'').value;
 	var projDate = document.getElementById('\''+projectDateEdit+'\'').value;
-	var projNotes = document.getElementById('\''+projectNotesEdit+'\'').value;
+	// var projNotes = document.getElementById('\''+projectNotesEdit+'\'').value;
 
 
 	var project = {
 		clientID: clientId,
 		date: projDate,
-		description: projDesc,
+		// description: projDesc,
 		email: projCliEmail,
 		id: projId,
 		location: projLocation,
 		name: projCliName,
-		notes: projNotes,
+		// notes: projNotes,
 		number: projCliNum,
 		title: projTitle
 	}
@@ -288,4 +352,77 @@ function enterProject(projId,projTitle) {
     location.href = "progressList.html";
 
     
+}
+
+
+function pagination(number,totalPage) {
+	//change page number
+	currentDevice = number;
+	activePage = number;
+
+for (var i = 1; i <= totalPage; i++) {
+	if(i==number){
+	var active = document.getElementById('\''+number+'\'');
+	active.classList.add("active");
+	}else {
+ 	var active = document.getElementById('\''+i+'\'');
+	active.classList.remove("active");
+	}
+}
+
+	//clear html
+	projectList.innerHTML ='';
+
+	//calculate page
+	indexOfLastDevice = currentDevice * devicesPerPage;
+	indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
+
+	//re-run html
+	var listslice = list.slice(
+     	indexOfFirstDevice,
+      	indexOfLastDevice
+     	);
+
+    listslice.map(function(item,index) {
+projectList.innerHTML +='<div class="col-md-4">' +
+    							'<div class="well box-style-2" id="\''+item.projectID+'\'">'+
+								'<h6>Project ID: ' + item.projectID + '</h6>' +
+								'<h3>' + '<input id="\''+item.projectTitleEdit+'\'" value="'+item.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
+								'<input id="\''+item.projectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
+								'<br></br>' +
+								'<div>'+
+								'<p>'+
+								'<a data-toggle="collapse" href="'+"#"+item.projectID+item.projectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
+								'</p>'+
+								'<div class="collapse" id="'+item.projectID+item.projectID+'">'+
+  								'<div class="card card-body">'+
+  								'<span class="glyphicon glyphicon-user"></span>' + " " +''+
+  								'<input id="\''+item.projectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
+  								'<input id="\''+item.projectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
+  								'<input id="\''+item.projectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
+  								'<br></br>' +
+  								'<span class="glyphicon glyphicon-flag"></span>' + " " +''+
+  								'<input id="\''+item.projectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
+  								'<br></br>' +
+  								'</div>'+
+								'</div>'+
+								'</div>'+
+								'<a href="#" onclick="enterProject(\''+item.projectID+'\',\''+item.title+'\')" class="a btn btn-success">Enter</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+item.projectID+'\', \''+item.clientId+'\',\''+item.projectTitleEdit+'\',\''+item.projectCliNameEdit+'\',\''+item.projectCliNumEdit+'\',\''+item.projectCliEmailEdit+'\',\''+item.projectLocationEdit+'\',\''+item.projectDateEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+item.projectID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+								'<div class="b btn-group action-btn">' +
+								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
+								'<ul class="dropdown-menu">' +
+							    '<li><a href="#" onclick="editProject(\''+item.projectID+'\')">Edit</a></li>'+
+							    '<li role="separator" class="divider"></li>'+
+							    '<li><a href="#" onclick="deleteProject(\''+item.projectID+'\')" >Delete</a></li>' +
+							  	'</ul>'+
+							  	'</div>' +
+							  	'</div>' +
+								'</div>';   	});
+
 }

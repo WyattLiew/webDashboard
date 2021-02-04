@@ -33,6 +33,9 @@ if (user) {
 UID = firebase.auth().currentUser.uid;
 
 fetchDefDetails(queryString);
+
+var titleName = document.getElementById("titleName");
+titleName.innerHTML = '<h3>'+defTitle+'</h3>';
 }else{
 	window.location='index.html';
 }
@@ -51,6 +54,7 @@ var defDetailsDate = document.getElementById('defDetailsDateInput').value;
 var defDetailsNotes = document.getElementById('defDetailsNotesInput').value;
 var vEveryone = document.getElementById("defDetailsEveryone").checked;
 var vUserOnly = document.getElementById("defDetailsUserOnly").checked;
+var newDate = new Date();
 var defDetailsId = newDefDetailsRef.push().key;
 var visibility = true;
 
@@ -60,8 +64,11 @@ if (vEveryone == true) {
 	visibility = false;
 }
 
+var updatedtime =newDate.getDate()+"/"+(newDate.getMonth()+1)+"/"+newDate.getUTCFullYear()+ " at " +newDate.getHours()+":"+ newDate.getMinutes() ;
+
 // input file
 var selectedFile = document.querySelector('#defDetailsUploadImages').files[0];
+var selectedFileLength = document.querySelector('#defDetailsUploadImages').files.length;
 
 // get file name && timestamp
 // var fullPath = document.getElementById("defDetailsUploadImages").files[0].name;
@@ -76,11 +83,14 @@ var defDetails = {
 	date: defDetailsDate,
 	id: defDetailsId,
 	notes: defDetailsNotes,
-	status: defDetailsStatus
+	status: defDetailsStatus,
+	updatedtime:updatedtime
 }
 
 
 e.preventDefault();
+
+if (selectedFileLength<=5) {
 
 if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && selectedFile.type.match('image')) {
 	// Show progress
@@ -151,6 +161,9 @@ if (defDetailsTitle!="" && selectedFile != null && defDetailsDate !="" && select
 }else{
 	alert("Please check your image type");
 } 
+}else {
+	alert("You can only upload a maximum of 5 images");
+}
 }
 
 // Add Image Data
@@ -227,7 +240,8 @@ function fetchDefDetails(queryString){
       	notes:currentObject.notes,
       	visibility:currentObject.visibility,
       	date:currentObject.date,
-      	defect:currentObject.defect
+      	defect:currentObject.defect,
+      	updatedtime:currentObject.updatedtime
 	};
 
  list.push(progressInfo);
@@ -270,7 +284,7 @@ function fetchDefDetails(queryString){
       indexOfLastDevice
      	);
     listslice.map(function(item,index) {
-      checkImage(item.defDetailsID,item.defDetailsTitleEdit,item.defDetailsStatusEdit,item.defDetailsVisibilityEdit,item.defDetailsDateEdit,item.defDetailsNotesEdit,item.defDetailsSelectStatusEdit,item.defDetailsEveryoneLabel,item.defDetailsUserOnlyLabel,item.defDetailsEveryoneEdit,item.defDetailsUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.defect);
+      checkImage(item.defDetailsID,item.defDetailsTitleEdit,item.defDetailsStatusEdit,item.defDetailsVisibilityEdit,item.defDetailsDateEdit,item.defDetailsNotesEdit,item.defDetailsSelectStatusEdit,item.defDetailsEveryoneLabel,item.defDetailsUserOnlyLabel,item.defDetailsEveryoneEdit,item.defDetailsUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.defect,item.updatedtime);
    	});
 
 
@@ -304,7 +318,7 @@ function fetchDefDetails(queryString){
 }
 
 // check Image
-function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,status,notes,visibility,date,defect) {
+function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDetailsVisibilityEdit,defDetailsDateEdit,defDetailsNotesEdit,defDetailsSelectStatusEdit,defDetailsEveryoneLabel,defDetailsUserOnlyLabel,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,status,notes,visibility,date,defect,updatedtime) {
 	var defDetailsImageURLEdit = 'https://firebasestorage.googleapis.com/v0/b/mproject-sharedb.appspot.com/o/Profile%20Picture%2Fempty.jpg?alt=media&token=572e9479-e896-4104-a90b-4a60ad70083d';
 	firebase.database().ref('/Defect add on image/' + defDetailsID).once('value').then(function(snapshot){
     var defDetailsImageObject = snapshot.val();
@@ -314,35 +328,80 @@ function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDet
      
     	defDetailsImageURLEdit = currentImageObject.imgURL; 
 
-    	 defDetailsList.innerHTML +='<div class="col-md-6">' +
+    	defDetailsList.innerHTML +='<div class="col-md-4">' +
     							'<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
 								'<h6>Defect Add On ID: ' + defDetailsID + '</h6>' +
 								'<img src="'+defDetailsImageURLEdit+'"class="img-thumbnail contentImage">' +
 								'<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+defect+'" class="text-capitalize" readonly required>' + '</h3>'+
-								'<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>' +
-								'<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h6>' +
+								''+ (status === "completed" ? '<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>'+'</h6>': '<h6>'+'<input id="\''+defDetailsStatusEdit+'\'" value="In progress" class="text-capitalize" readonly required>'+'</h6>')+''+
+								'<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option id="\''+defDetailsSelectStatusEdit+'\'5" value="5%">5%</option><option id="\''+defDetailsSelectStatusEdit+'\'25" value="25%">25%</option><option id="\''+defDetailsSelectStatusEdit+'\'50" value="50%">50%</option><option id="\''+defDetailsSelectStatusEdit+'\'75" value="75%">75%</option><option id="\''+defDetailsSelectStatusEdit+'\'100" value="completed">Completed</option></select></h6>' +
+								'<div class="progress">'+
+								''+ (status === "completed" ? '<div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>' : '<div class="progress-bar" role="progressbar" style="width: '+status+';" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+status+'</div>') +''+
+								'</div>'+
 								//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
+								'<p class="glyphicon glyphicon-time ">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</p>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
+								'<p class="glyphicon glyphicon-eye-open">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
 								'<label id="\''+defDetailsEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsEveryoneEdit+'\'" name="\''+defDetailsID+"visibility"+'\'" checked>Everyone </label>' +
-								'<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></span>' +
+								'<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></p>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defDetailsNotesEdit+'\'" value="'+notes+'"  readonly>' + '</span>' +
+								'<span class="glyphicon glyphicon-comment "></span>' + " " +''+
+								'<input class="" id="\''+defDetailsNotesEdit+'\'" value="'+notes+'"  readonly>'+
+								'<div id="\''+defDetailsNotesEdit+defDetailsID+'\'">'+
+								'<p>'+
+								'<a data-toggle="collapse" href="'+"#"+defDetailsID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Read more</a>'+
+								'</p>'+
+								'<div class="collapse" id="'+defDetailsID+'">'+
+  								'<div class="card card-body">'+notes+'</div>'+
+								'</div>'+
+								'</div>'+
 								'<br></br>' +
 								'<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="a btn btn-success">Show more</a>' + " " + 
 								'<a href="#" onclick="saveEdit(\''+defDetailsID+'\', \''+defDetailsEveryoneEdit+'\',\''+defDetailsUserOnlyEdit+'\',\''+defDetailsSelectStatusEdit+'\',\''+defDetailsDateEdit+'\',\''+defDetailsNotesEdit+'\',\''+defDetailsTitleEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
-								'<a href="#" onclick="cancelEdit(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\',\''+defDetailsNotesEdit+defDetailsID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
 								'<div class="btn-group action-btn">' +
 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +
-							    '<li><a href="#" onclick="editDefDetails(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\')">Edit</a></li>'+
+							    '<li><a href="#" onclick="editDefDetails(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\',\''+defDetailsNotesEdit+defDetailsID+'\',\''+status+'\',\''+visibility+'\',\''+defDetailsEveryoneEdit+'\',\''+defDetailsUserOnlyEdit+'\')">Edit</a></li>'+
 							    '<li role="separator" class="divider"></li>'+
 							    '<li><a href="#" onclick="deleteDefDetails(\''+defDetailsID+'\')" >Delete</a></li>' +
 							  	'</ul>'+
 							  	'</div>' +
+							  	'<div>'+ 
+							  	'<h6>Last modified on '+updatedtime+'</h6>'+
+							  	'</div>'+
 							  	'</div>' +
 								'</div>';
+
+    	 // defDetailsList.innerHTML +='<div class="col-md-4">' +
+    		// 					'<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
+						// 		'<h6>Defect Add On ID: ' + defDetailsID + '</h6>' +
+						// 		'<img src="'+defDetailsImageURLEdit+'"class="img-thumbnail contentImage">' +
+						// 		'<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+defect+'" class="text-capitalize" readonly required>' + '</h3>'+
+						// 		'<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>' +
+						// 		'<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h6>' +
+						// 		//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
+						// 		'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
+						// 		'<br></br>' +
+						// 		'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
+						// 		'<label id="\''+defDetailsEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsEveryoneEdit+'\'" name="\''+defDetailsID+"visibility"+'\'" checked>Everyone </label>' +
+						// 		'<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></span>' +
+						// 		'<br></br>' +
+						// 		'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+defDetailsNotesEdit+'\'" value="'+notes+'"  readonly>' + '</span>' +
+						// 		'<br></br>' +
+						// 		'<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="a btn btn-success">Show more</a>' + " " + 
+						// 		'<a href="#" onclick="saveEdit(\''+defDetailsID+'\', \''+defDetailsEveryoneEdit+'\',\''+defDetailsUserOnlyEdit+'\',\''+defDetailsSelectStatusEdit+'\',\''+defDetailsDateEdit+'\',\''+defDetailsNotesEdit+'\',\''+defDetailsTitleEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+						// 		'<a href="#" onclick="cancelEdit(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+						// 		'<div class="btn-group action-btn">' +
+						// 		'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
+						// 		'<ul class="dropdown-menu">' +
+						// 	    '<li><a href="#" onclick="editDefDetails(\''+defDetailsID+'\',\''+defDetailsVisibilityEdit+'\',\''+defDetailsEveryoneLabel+'\',\''+defDetailsUserOnlyLabel+'\',\''+defDetailsStatusEdit+'\',\''+defDetailsSelectStatusEdit+'\')">Edit</a></li>'+
+						// 	    '<li role="separator" class="divider"></li>'+
+						// 	    '<li><a href="#" onclick="deleteDefDetails(\''+defDetailsID+'\')" >Delete</a></li>' +
+						// 	  	'</ul>'+
+						// 	  	'</div>' +
+						// 	  	'</div>' +
+						// 		'</div>';
 
 		defectTable.innerHTML += '<tr>'+
      '<td width="300" height="300"><img src="'+defDetailsImageURLEdit+'" width="150" /></td>'+
@@ -390,7 +449,7 @@ function deleteDefDetails(defDetailsId) {
 }
 
 // Edit defDetails
-function editDefDetails(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsStatusView,defDetailsStatusEdit) {
+function editDefDetails(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsStatusView,defDetailsStatusEdit,readmore,status,checkVisibility,defDetailsEveryoneEdit,defDetailsUserOnlyEdit) {
 	var form = document.getElementById('\''+defDetailsId+'\'');
 	var ipt = form.getElementsByTagName('input');
 
@@ -412,10 +471,50 @@ function editDefDetails(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsSt
 	vEveryoneEdit.classList.remove("hidden");
 	vUserOnlyEdit.classList.remove("hidden");
 	vProgressStatus.classList.remove("hidden");
+
+	var readmore = document.getElementById('\''+readmore+'\'');
+	readmore.classList.add("hidden");
+
+	var in_5 = document.getElementById('\''+defDetailsStatusEdit+'\'5');
+	var in_25 = document.getElementById('\''+defDetailsStatusEdit+'\'25');
+	var in_50 = document.getElementById('\''+defDetailsStatusEdit+'\'50');
+	var in_75 = document.getElementById('\''+defDetailsStatusEdit+'\'75');
+	var completed = document.getElementById('\''+defDetailsStatusEdit+'\'100');
+	var everyone = document.getElementById('\''+defDetailsEveryoneEdit+'\'');
+	var useronly = document.getElementById('\''+defDetailsUserOnlyEdit+'\'');
+	switch(status) {
+		case '5%':
+		in_5.selected = true;
+		break;
+		case '25%':
+		in_25.selected = true;
+		break;
+		case '50%':
+		in_50.selected = true;
+		break;
+		case '75%':
+		in_75.selected = true;
+		break;
+		case 'completed':
+		completed.selected = true;
+		break;
+		default:
+		console.log(`Sorry, we are out of ${status}.`);
+	}
+	switch(checkVisibility) {
+		case 'true':
+		everyone.checked = true;
+		break;
+		case 'false':
+		useronly.checked = true;
+		break;
+		default:
+		console.log(`Sorry, we are out of ${checkVisibility}.`);
+	}
 }
 
 // cancel edit
-function cancelEdit(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsStatusView,defDetailsStatusEdit) {
+function cancelEdit(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsStatusView,defDetailsStatusEdit,readmore) {
 	var s = document.getElementById('\''+defDetailsStatusView+'\'');
 	s.classList.remove("hidden");
 
@@ -435,6 +534,9 @@ function cancelEdit(defDetailsId,visibility,vEveryone,vUserOnly,defDetailsStatus
 	vUserOnlyEdit.classList.add("hidden");
 	vProgressStatus.classList.add("hidden");
 	// fetchDefDetails(queryString);
+
+	var readmore = document.getElementById('\''+readmore+'\'');
+	readmore.classList.remove("hidden");
 }
 
 // save edit
@@ -446,6 +548,8 @@ function saveEdit(defDetailsID,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,def
 	var defDetailsDate = document.getElementById('\''+defDetailsDateEdit+'\'').value;
 	var defDetailsNotes = document.getElementById('\''+defDetailsNotesEdit+'\'').value;
 	var defDetailsTitle = document.getElementById('\''+defDetailsTitleEdit+'\'').value;
+	var newDate = new Date();
+	var updatedtime =newDate.getDate()+"/"+(newDate.getMonth()+1)+"/"+newDate.getUTCFullYear()+ " at " +newDate.getHours()+":"+ newDate.getMinutes() ;
 
 	var visibility = true;
 
@@ -462,7 +566,8 @@ function saveEdit(defDetailsID,defDetailsEveryoneEdit,defDetailsUserOnlyEdit,def
 	id: defDetailsID,
 	// imgURL: imageURL,
 	notes: defDetailsNotes,
-	status: defDetailsStatus
+	status: defDetailsStatus,
+	updatedtime:updatedtime
 }
 
 	
@@ -496,7 +601,7 @@ function selectDefDetailsImages(defDetailsId){
                 '<label for="defDetailsUploadAddOnImages">Upload Images * (Image Only)</label>'+
                 '<input type="file" class="upload-group" id="defDetailsUploadAddOnImages" required multiple>'+
                 '<br>'+
-                '<a href="#"class="btn btn-success" onclick="addDefectImages(\''+defDetailsId+'\')">'+'Add</a>'+'</div>'+'<br>' +
+                '<a href="#"class="btn btn-success" onclick="addDefectImages(\''+defDetailsId+'\',\''+keys.length+'\')">'+'Add</a>'+'</div>'+'<br>' +
              '</div>';
 
     // Show images //
@@ -524,13 +629,14 @@ function selectDefDetailsImages(defDetailsId){
 }
 
 // Add progress Image individually
-function addDefectImages(defDetailsId){
+function addDefectImages(defDetailsId,keys){
 	// input file
 	var selectedFiles = document.querySelector('#defDetailsUploadAddOnImages').files;
 	var selectedFile = document.querySelector('#defDetailsUploadAddOnImages').files[0];
 	var count = 0;
 	var fileLength = selectedFiles.length;
 
+if(fileLength<=5 && keys<=5) {
 	if (selectedFile != null && selectedFile.type.match('image')) {
 
 	for (var i = 0; i < selectedFiles.length;i++) {
@@ -553,6 +659,9 @@ if (selectedFiles[i].type.match('image')){
 }else{
 	alert("Please check your image type");
 } 
+} else {
+	alert("You can only upload a maximum of 5 images");
+}
 }
 
 // Delete progress Image individually

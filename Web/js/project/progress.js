@@ -31,6 +31,9 @@ if (user) {
 	//user is signed in
 UID = firebase.auth().currentUser.uid;
 fetchProgress(queryString);
+var titleName = document.getElementById("titleName");
+titleName.innerHTML = '<h3>'+projTitle+'</h3>';
+
 }else{
 	window.location='index.html';
 }
@@ -43,11 +46,13 @@ progressAddBtn = document.getElementById("progress-add-btn");
 
 function saveProgress(e){
 var UID = firebase.auth().currentUser.uid;
+var progressTitle = document.getElementById('progressTitleInput').value;
 var progressStatus= document.getElementById('progressStatus').value;
 var progressDate = document.getElementById('progressDateInput').value;
 var progressNotes = document.getElementById('progressNotesInput').value;
 var vEveryone = document.getElementById("progressEveryone").checked;
 var vUserOnly = document.getElementById("progressUserOnly").checked;
+var newDate = new Date();
 var progressId = newProgressRef.push().key;
 var visibility = true;
 
@@ -57,8 +62,11 @@ if (vEveryone == true) {
 	visibility = false;
 }
 
+var updatedtime =newDate.getDate()+"/"+(newDate.getMonth()+1)+"/"+newDate.getUTCFullYear()+ " at " +newDate.getHours()+":"+ newDate.getMinutes() ;
+
 // input file
 var selectedFile = document.querySelector('#progressUploadImages').files[0];
+var selectedFileLength = document.querySelector('#progressUploadImages').files.length;
 
 // get file name && timestamp
 // var fullPath = document.getElementById("progressUploadImages").files[0].name;
@@ -68,15 +76,18 @@ var selectedFile = document.querySelector('#progressUploadImages').files[0];
 // }
 
 var progress = {
+	title:progressTitle,
 	visibility: visibility,
 	date: progressDate,
 	id: progressId,
 	notes: progressNotes,
-	status: progressStatus
+	status: progressStatus,
+	updatedtime:updatedtime
 }
 
 
 e.preventDefault();
+if (selectedFileLength<=5) {
 
 if (selectedFile != null && progressDate !="" && selectedFile.type.match('image')) {
 	// Show progress
@@ -149,6 +160,9 @@ if (selectedFiles[i].type.match('image')){
 }else{
 	alert("Please check your image type");
 } 
+}else {
+	alert("You can only upload a maximum of 5 images");
+}
 }
 
 // Add Image Data
@@ -197,6 +211,7 @@ function fetchProgress(queryString){
 	progressPagination.innerHTML = "";
 	progressTable.innerHTML = '<tr>'+
     '<th>Image</th>'+
+     '<th>Title</th>'+
     '<th>Status</th>'+
     '<th>Date</th>'+
     '<th>Notes</th>'+
@@ -223,6 +238,7 @@ function fetchProgress(queryString){
 
       var progressInfo = {
 		progressID:currentObject.id,
+		progressTitleEdit:progressID + currentObject.title,
       	progressStatusEdit:progressID+currentObject.status,
       	progressVisibilityEdit:progressID + currentObject.visibility,
       // var progressImageURLEdit = progressID + currentObject.imgURL; 
@@ -237,41 +253,11 @@ function fetchProgress(queryString){
       	notes:currentObject.notes,
       	visibility:currentObject.visibility,
       	date:currentObject.date,
+      	title:currentObject.title,
+      	updatedtime:currentObject.updatedtime
 	};
 
  list.push(progressInfo);
-
-
-      // checkImage(progressID,progressStatusEdit,progressVisibilityEdit,progressDateEdit,progressNotesEdit,progressSelectStatusEdit,progressEveryoneLabel,progressUserOnlyLabel,progressEveryoneEdit,progressUserOnlyEdit,currentObject.status,currentObject.notes,currentObject.visibility,currentObject.date);
-
-// progressList.innerHTML +='<div class="col-md-6">' +
-//     							'<div class="well box-style-2" id="\''+progressID+'\'">'+
-// 								'<h6>Progress ID: ' + currentObject.id + '</h6>' +
-// 								'<img src="'+currentObject.imgURL+'"class="img-thumbnail contentImage">' +
-// 								'<h3>' + '<input id="\''+progressStatusEdit+'\'" value="'+currentObject.status+'" class="text-capitalize" readonly required>' +
-// 								'<select id="\''+progressSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h3>' +
-// 								//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-// 								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+progressDateEdit+'\'" type="Date" value="'+currentObject.date+'"  readonly required>' + '</span>' +
-// 								'<br></br>' +
-// 								'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+progressVisibilityEdit+'\'" type="text" value="'+getVisibility(currentObject.visibility)+'" class="text-uppercase" readonly required>' + 
-// 								'<label id="\''+progressEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressEveryoneEdit+'\'" name="\''+progressID+"visibility"+'\'" checked>Everyone </label>' +
-// 								'<label id="\''+progressUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressUserOnlyEdit+'\'" name="\''+progressID+"visibility"+'\'">Members</label></span>' +
-// 								'<br></br>' +
-// 								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+progressNotesEdit+'\'" value="'+currentObject.notes+'"  readonly>' + '</span>' +
-// 								'<br></br>' +
-// 								'<a href="#" onclick="selectProgressImages(\''+progressID+'\')" data-toggle="modal" data-target="#progressShowMore" class="btn btn-success">Show more</a>' + " " + 
-// 								'<a href="#" onclick="saveEdit(\''+progressID+'\', \''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressDateEdit+'\',\''+progressNotesEdit+'\')" class="btn btn-success">Save</a>' + " " + 
-// 								'<a href="#" onclick="cancelEdit(\''+progressID+'\')" class="btn btn-danger">cancel</a>' + " " + 
-// 								'<div class="btn-group action-btn">' +
-// 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
-// 								'<ul class="dropdown-menu">' +
-// 							    '<li><a href="#" onclick="editProgress(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\')">Edit</a></li>'+
-// 							    '<li role="separator" class="divider"></li>'+
-// 							    '<li><a href="#" onclick="deleteProgress(\''+progressID+'\')" >Delete</a></li>' +
-// 							  	'</ul>'+
-// 							  	'</div>' +
-// 							  	'</div>' +
-// 								'</div>';
 
     }
 
@@ -280,7 +266,7 @@ function fetchProgress(queryString){
       indexOfLastDevice
      	);
     listslice.map(function(item,index) {
-   		checkImage(item.progressID,item.progressStatusEdit,item.progressVisibilityEdit,item.progressDateEdit,item.progressNotesEdit,item.progressSelectStatusEdit,item.progressEveryoneLabel,item.progressUserOnlyLabel,item.progressEveryoneEdit,item.progressUserOnlyEdit,item.status,item.notes,item.visibility,item.date);
+   		checkImage(item.progressID,item.progressTitleEdit,item.progressStatusEdit,item.progressVisibilityEdit,item.progressDateEdit,item.progressNotesEdit,item.progressSelectStatusEdit,item.progressEveryoneLabel,item.progressUserOnlyLabel,item.progressEveryoneEdit,item.progressUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.title,item.updatedtime);
    	});
 
 
@@ -311,7 +297,7 @@ function fetchProgress(queryString){
 }
 
 // check Image
-function checkImage(progressID,progressStatusEdit,progressVisibilityEdit,progressDateEdit,progressNotesEdit,progressSelectStatusEdit,progressEveryoneLabel,progressUserOnlyLabel,progressEveryoneEdit,progressUserOnlyEdit,status,notes,visibility,date) {
+function checkImage(progressID,progressTitleEdit,progressStatusEdit,progressVisibilityEdit,progressDateEdit,progressNotesEdit,progressSelectStatusEdit,progressEveryoneLabel,progressUserOnlyLabel,progressEveryoneEdit,progressUserOnlyEdit,status,notes,visibility,date,title,updatedtime) {
 	var progressImageURLEdit = 'https://firebasestorage.googleapis.com/v0/b/mproject-sharedb.appspot.com/o/Profile%20Picture%2Fempty.jpg?alt=media&token=572e9479-e896-4104-a90b-4a60ad70083d';
 	firebase.database().ref('/Project add on image/' + progressID).once('value').then(function(snapshot){
  var progressImageObject = snapshot.val();
@@ -321,38 +307,84 @@ function checkImage(progressID,progressStatusEdit,progressVisibilityEdit,progres
      
     progressImageURLEdit = currentImageObject.imgURL; 
 
-    	progressList.innerHTML +='<div class="col-md-6">' +
+    progressList.innerHTML +='<div class="col-md-4">' +
     							'<div class="well box-style-2" id="\''+progressID+'\'">'+
 								'<h6>Progress ID: ' +progressID+ '</h6>' +
 								'<img src="'+progressImageURLEdit+'"class="img-thumbnail contentImage">' +
-								'<h3>' + '<input id="\''+progressStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>' +
-								'<select id="\''+progressSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h3>' +
+								'<h3>' + '<input id="\''+progressTitleEdit+'\'" value="'+title+'" class="text-capitalize" readonly required>' + '</h3>'+
+								''+ (status === "completed" ? '<h6>' + '<input id="\''+progressStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>'+'</h6>': '<h6>'+'<input id="\''+progressStatusEdit+'\'" value="In progress" class="text-capitalize" readonly required>'+'</h6>')+''+
+								'<select id="\''+progressSelectStatusEdit+'\'" class="hidden"><option id="\''+progressSelectStatusEdit+'\'5" value="5%">5%</option><option id="\''+progressSelectStatusEdit+'\'25" value="25%">25%</option><option id="\''+progressSelectStatusEdit+'\'50" value="50%">50%</option><option id="\''+progressSelectStatusEdit+'\'75" value="75%">75%</option><option id="\''+progressSelectStatusEdit+'\'100" value="completed">Completed</option></select></h6>' +
+								'<div class="progress">'+
+								''+ (status === "completed" ? '<div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>' : '<div class="progress-bar" role="progressbar" style="width: '+status+';" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+status+'</div>') +''+
+								'</div>'+
 								//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+progressDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
+								'<span class="glyphicon glyphicon-time ">' +" "+ '<input id="\''+progressDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+progressVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
+								'<span class="glyphicon glyphicon-eye-open ">' + " " +'<input id="\''+progressVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
 								'<label id="\''+progressEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressEveryoneEdit+'\'" name="\''+progressID+"visibility"+'\'" checked>Everyone </label>' +
 								'<label id="\''+progressUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressUserOnlyEdit+'\'" name="\''+progressID+"visibility"+'\'">Members</label></span>' +
 								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+progressNotesEdit+'\'" value="'+notes+'"  readonly>' + '</span>' +
+								'<span class="glyphicon glyphicon-comment "></span>' + " " +''+
+								'<input class="" id="\''+progressNotesEdit+'\'" value="'+notes+'"  readonly>'+
+								'<div id="\''+progressNotesEdit+progressID+'\'">'+
+								'<p>'+
+								'<a data-toggle="collapse" href="'+"#"+progressID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Read more</a>'+
+								'</p>'+
+								'<div class="collapse" id="'+progressID+'">'+
+  								'<div class="card card-body">'+notes+'</div>'+
+								'</div>'+
+								'</div>'+
 								'<br></br>' +
 								'<a href="#" onclick="selectProgressImages(\''+progressID+'\')" data-toggle="modal" data-target="#progressShowMore" class="a btn btn-success">Show more</a>' + " " + 
-								'<a href="#" onclick="saveEdit(\''+progressID+'\', \''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressDateEdit+'\',\''+progressNotesEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
-								'<a href="#" onclick="cancelEdit(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+progressID+'\', \''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressDateEdit+'\',\''+progressNotesEdit+'\',\''+progressTitleEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="cancelEdit(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressNotesEdit+progressID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
 								'<div class="btn-group action-btn">' +
 								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +
-							    '<li><a href="#" onclick="editProgress(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\')">Edit</a></li>'+
+							    '<li><a href="#" onclick="editProgress(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressNotesEdit+progressID+'\',\''+status+'\',\''+visibility+'\',\''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\')">Edit</a></li>'+
 							    '<li role="separator" class="divider"></li>'+
 							    '<li><a href="#" onclick="deleteProgress(\''+progressID+'\')" >Delete</a></li>' +
 							  	'</ul>'+
 							  	'</div>' +
+							  	'<div>'+ 
+							  	'<h6>Last modified on '+updatedtime+'</h6>'+
+							  	'</div>'+
 							  	'</div>' +
 								'</div>';	
+
+    	// progressList.innerHTML +='<div class="col-md-4">' +
+    	// 						'<div class="well box-style-2" id="\''+progressID+'\'">'+
+					// 			'<h6>Progress ID: ' +progressID+ '</h6>' +
+					// 			'<img src="'+progressImageURLEdit+'"class="img-thumbnail contentImage">' +
+					// 			'<h3>' + '<input id="\''+progressStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>' +
+					// 			'<select id="\''+progressSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h3>' +
+					// 			//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
+					// 			'<span class="glyphicon glyphicon-time col-md-6">' +" "+ '<input id="\''+progressDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
+					// 			'<br></br>' +
+					// 			'<span class="glyphicon glyphicon-eye-open col-md-6">' + " " +'<input id="\''+progressVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
+					// 			'<label id="\''+progressEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressEveryoneEdit+'\'" name="\''+progressID+"visibility"+'\'" checked>Everyone </label>' +
+					// 			'<label id="\''+progressUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressUserOnlyEdit+'\'" name="\''+progressID+"visibility"+'\'">Members</label></span>' +
+					// 			'<br></br>' +
+					// 			'<span class="glyphicon glyphicon-comment col-md-6">' + " " +'<input id="\''+progressNotesEdit+'\'" value="'+notes+'"  readonly>' + '</span>' +
+					// 			'<br></br>' +
+					// 			'<a href="#" onclick="selectProgressImages(\''+progressID+'\')" data-toggle="modal" data-target="#progressShowMore" class="a btn btn-success">Show more</a>' + " " + 
+					// 			'<a href="#" onclick="saveEdit(\''+progressID+'\', \''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressDateEdit+'\',\''+progressNotesEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+					// 			'<a href="#" onclick="cancelEdit(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\')" class="a btn btn-danger">cancel</a>' + " " + 
+					// 			'<div class="btn-group action-btn">' +
+					// 			'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
+					// 			'<ul class="dropdown-menu">' +
+					// 		    '<li><a href="#" onclick="editProgress(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\')">Edit</a></li>'+
+					// 		    '<li role="separator" class="divider"></li>'+
+					// 		    '<li><a href="#" onclick="deleteProgress(\''+progressID+'\')" >Delete</a></li>' +
+					// 		  	'</ul>'+
+					// 		  	'</div>' +
+					// 		  	'</div>' +
+					// 			'</div>';	
 
 			progressTable.innerHTML += 
   '<tr>'+
      '<td width="300" height="300"><img src="'+progressImageURLEdit+'" width="150" /></td>'+
+     '<td>'+title+'</td>'+
     '<td>'+status+'</td>'+
     '<td>'+date+'</td>'+
     '<td>'+notes+'</td>'+
@@ -410,7 +442,7 @@ function deleteProgress(progressId) {
 	
 
 // Edit progress
-function editProgress(progressId,visibility,vEveryone,vUserOnly,progressStatusView,progressStatusEdit) {
+function editProgress(progressId,visibility,vEveryone,vUserOnly,progressStatusView,progressStatusEdit,readmore,status,checkVisibility,progressEveryoneEdit,progressUserOnlyEdit) {
 	var form = document.getElementById('\''+progressId+'\'');
 	var ipt = form.getElementsByTagName('input');
 
@@ -432,10 +464,51 @@ function editProgress(progressId,visibility,vEveryone,vUserOnly,progressStatusVi
 	vEveryoneEdit.classList.remove("hidden");
 	vUserOnlyEdit.classList.remove("hidden");
 	vProgressStatus.classList.remove("hidden");
+	var readmore = document.getElementById('\''+readmore+'\'');
+	readmore.classList.add("hidden");
+
+
+	var in_5 = document.getElementById('\''+progressStatusEdit+'\'5');
+	var in_25 = document.getElementById('\''+progressStatusEdit+'\'25');
+	var in_50 = document.getElementById('\''+progressStatusEdit+'\'50');
+	var in_75 = document.getElementById('\''+progressStatusEdit+'\'75');
+	var completed = document.getElementById('\''+progressStatusEdit+'\'100');
+	var everyone = document.getElementById('\''+progressEveryoneEdit+'\'');
+	var useronly = document.getElementById('\''+progressUserOnlyEdit+'\'');
+	switch(status) {
+		case '5%':
+		in_5.selected = true;
+		break;
+		case '25%':
+		in_25.selected = true;
+		break;
+		case '50%':
+		in_50.selected = true;
+		break;
+		case '75%':
+		in_75.selected = true;
+		break;
+		case 'completed':
+		completed.selected = true;
+		break;
+		default:
+		console.log(`Sorry, we are out of ${status}.`);
+	}
+	switch(checkVisibility) {
+		case 'true':
+		everyone.checked = true;
+		break;
+		case 'false':
+		useronly.checked = true;
+		break;
+		default:
+		console.log(`Sorry, we are out of ${checkVisibility}.`);
+	}
+	
 }
 
 // cancel edit
-function cancelEdit(progressId,visibility,vEveryone,vUserOnly,progressStatusView,progressStatusEdit) {
+function cancelEdit(progressId,visibility,vEveryone,vUserOnly,progressStatusView,progressStatusEdit,readmore) {
 	var s = document.getElementById('\''+progressStatusView+'\'');
 	s.classList.remove("hidden");
 
@@ -455,16 +528,21 @@ function cancelEdit(progressId,visibility,vEveryone,vUserOnly,progressStatusView
 	vUserOnlyEdit.classList.add("hidden");
 	vProgressStatus.classList.add("hidden");
 	// fetchProgress(queryString);
+	var readmore = document.getElementById('\''+readmore+'\'');
+	readmore.classList.remove("hidden");
 }
 
 // save edit
-function saveEdit(progressID,progressEveryoneEdit,progressUserOnlyEdit,progressStatusEdit,progressDateEdit,progressNotesEdit) {
+function saveEdit(progressID,progressEveryoneEdit,progressUserOnlyEdit,progressStatusEdit,progressDateEdit,progressNotesEdit,progressTitleEdit) {
 	var form = document.getElementById('\''+progressID+'\'');
 	var progressEveryone = document.getElementById('\''+progressEveryoneEdit+'\'').checked;
 	var progressUserOnly = document.getElementById('\''+progressUserOnlyEdit+'\'').checked;
 	var progressStatus = document.getElementById('\''+progressStatusEdit+'\'').value;
 	var progressDate = document.getElementById('\''+progressDateEdit+'\'').value;
 	var progressNotes = document.getElementById('\''+progressNotesEdit+'\'').value;
+	var progressTitle = document.getElementById('\''+progressTitleEdit+'\'').value;
+	var newDate = new Date();
+	var updatedtime =newDate.getDate()+"/"+(newDate.getMonth()+1)+"/"+newDate.getUTCFullYear()+ " at " +newDate.getHours()+":"+ newDate.getMinutes() ;
 
 	var visibility = true;
 
@@ -475,17 +553,19 @@ function saveEdit(progressID,progressEveryoneEdit,progressUserOnlyEdit,progressS
 	}
 
 	var progress = {
+	title:progressTitle,
 	visibility: visibility,
 	date: progressDate,
 	id: progressID,
 	// imgURL: imageURL,
 	notes: progressNotes,
-	status: progressStatus
+	status: progressStatus,
+	updatedtime:updatedtime
 }
 
 	
 
-	if (progressDate !="") {
+	if (progressDate !="" && progressTitle !="") {
 
 
 			// save data to firebase
@@ -514,7 +594,7 @@ function selectProgressImages(progressId){
                 '<label for="progressUploadAddOnImages">Upload Images * (Image Only)</label>'+
                 '<input type="file" class="upload-group" id="progressUploadAddOnImages" required multiple>'+
                 '<br>'+
-                '<a href="#"class="btn btn-success" onclick="addProgressImages(\''+progressId+'\')">'+'Add</a>'+'</div>'+'<br>' +
+                '<a href="#"class="btn btn-success" onclick="addProgressImages(\''+progressId+'\',\''+keys.length+'\')">'+'Add</a>'+'</div>'+'<br>' +
              '</div>';
 
     // Show images //
@@ -542,13 +622,14 @@ function selectProgressImages(progressId){
 }
 
 // Add progress Image individually
-function addProgressImages(progressId){
+function addProgressImages(progressId,keys){
 	// input file
 	var selectedFiles = document.querySelector('#progressUploadAddOnImages').files;
 	var selectedFile = document.querySelector('#progressUploadAddOnImages').files[0];
 	var count = 0;
 	var fileLength = selectedFiles.length;
 
+	if(fileLength<=5 && keys<=5) {
 	if (selectedFile != null && selectedFile.type.match('image')) {
 
 	for (var i = 0; i < selectedFiles.length;i++) {
@@ -571,6 +652,9 @@ if (selectedFiles[i].type.match('image')){
 }else{
 	alert("Please check your image type");
 } 
+} else {
+	alert("You can only upload a maximum of 5 images");
+}
 }
 
 // Delete progress Image individually
