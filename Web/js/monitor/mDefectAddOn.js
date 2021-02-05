@@ -121,24 +121,24 @@ function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDet
       defDetailsImageURLEdit = currentImageObject.imgURL; 
 
       defDetailsList.innerHTML +='<div class="col-md-4">' +
-                  '<div class="well box-style-2" id="\''+defDetailsID+'\'">'+
-                '<h6>Defect Add On ID: ' + defDetailsID + '</h6>' +
+                 '<div class="card card-body box-style-2" id="\''+defDetailsID+'\'">'+
+                '<h6>Defect ID: ' + defDetailsID + '</h6>' +
                 '<img src="'+defDetailsImageURLEdit+'"class="img-thumbnail contentImage">' +
-                '<h3>' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+defect+'" class="text-capitalize" readonly required>' + '</h3>'+
+                '<h3 class="pt-2">' + '<input id="\''+defDetailsTitleEdit+'\'" value="'+defect+'" class="text-capitalize" readonly required>' + '</h3>'+
                 ''+ (status === "completed" ? '<h6>' + '<input id="\''+defDetailsStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>'+'</h6>': '<h6>'+'<input id="\''+defDetailsStatusEdit+'\'" value="In progress" class="text-capitalize" readonly required>'+'</h6>')+''+
-                '<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option value="completed">Completed</option> <option value="in progress">In progress</option> <option value="deferred">Deferred</option></select></h6>' +
+                '<select id="\''+defDetailsSelectStatusEdit+'\'" class="hidden"> <option id="\''+defDetailsSelectStatusEdit+'\'5" value="5%">5%</option><option id="\''+defDetailsSelectStatusEdit+'\'25" value="25%">25%</option><option id="\''+defDetailsSelectStatusEdit+'\'50" value="50%">50%</option><option id="\''+defDetailsSelectStatusEdit+'\'75" value="75%">75%</option><option id="\''+defDetailsSelectStatusEdit+'\'100" value="completed">Completed</option></select></h6>' +
                 '<div class="progress">'+
                 ''+ (status === "completed" ? '<div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>' : '<div class="progress-bar" role="progressbar" style="width: '+status+';" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+status+'</div>') +''+
                 '</div>'+
                 //'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-                '<span class="glyphicon glyphicon-time ">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
-                '<br></br>' +
-                '<span class="glyphicon glyphicon-eye-open ">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
+                '<i class="fa fa-calendar py-3">' +" "+ '<input id="\''+defDetailsDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</i>' +
+
+                '<i class="fa fa-eye pb-3">' + " " +'<input id="\''+defDetailsVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
                 '<label id="\''+defDetailsEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsEveryoneEdit+'\'" name="\''+defDetailsID+"visibility"+'\'" checked>Everyone </label>' +
-                '<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></span>' +
-                '<br></br>' +
-                '<span class="glyphicon glyphicon-comment "></span>' + " " +''+
-                '<input class="" id="\''+defDetailsNotesEdit+'\'" value="'+notes+'"  readonly>'+
+                '<label id="\''+defDetailsUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+defDetailsUserOnlyEdit+'\'" name="\''+defDetailsID+"visibility"+'\'">Menbers</label></i>' +
+
+                '<i class="fa fa-comment pb-3">' + " " +''+
+                '<input class="" id="\''+defDetailsNotesEdit+'\'" value="'+notes+'"  readonly></i>'+
                 '<div id="\''+defDetailsNotesEdit+defDetailsID+'\'">'+
                 '<p>'+
                 '<a data-toggle="collapse" href="'+"#"+defDetailsID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Read more</a>'+
@@ -147,10 +147,10 @@ function checkImage(defDetailsID,defDetailsTitleEdit,defDetailsStatusEdit,defDet
                   '<div class="card card-body">'+notes+'</div>'+
                 '</div>'+
                 '</div>'+
-                '<br></br>' +
-                '<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="btn btn-success">Show more</a>' + " " + 
-                '<div>'+ 
-                  '<h6>Last modified on '+updatedtime+'</h6>'+
+                
+                '<a href="#" onclick="selectDefDetailsImages(\''+defDetailsID+'\')" data-toggle="modal" data-target="#defDetailsShowMore" class="a btn btn-success my-3">Show more</a>' + " " + 
+                  '<div>'+ 
+                  '<h6 class="">Last modified on '+updatedtime+'</h6>'+
                   '</div>'+
                   '</div>' +
                 '</div>';
@@ -228,7 +228,7 @@ for (var i = 1; i <= totalPage; i++) {
       );
 
     listslice.map(function(item,index) {
-      checkImage(item.defDetailsID,item.defDetailsTitleEdit,item.defDetailsStatusEdit,item.defDetailsVisibilityEdit,item.defDetailsDateEdit,item.defDetailsNotesEdit,item.defDetailsSelectStatusEdit,item.defDetailsEveryoneLabel,item.defDetailsUserOnlyLabel,item.defDetailsEveryoneEdit,item.defDetailsUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.defect);
+      checkImage(item.defDetailsID,item.defDetailsTitleEdit,item.defDetailsStatusEdit,item.defDetailsVisibilityEdit,item.defDetailsDateEdit,item.defDetailsNotesEdit,item.defDetailsSelectStatusEdit,item.defDetailsEveryoneLabel,item.defDetailsUserOnlyLabel,item.defDetailsEveryoneEdit,item.defDetailsUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.defect,item.updatedtime);
     });
 
 }

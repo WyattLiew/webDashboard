@@ -76,29 +76,29 @@ function fetchProjects(userId){
       );
     listslice.map(function(item,index) {
       projectList.innerHTML +='<div class="col-md-4">' +
-                  '<div class="well box-style-2" id="\''+item.projectID+'\'">'+
+                  '<div class="card card-body box-style-2" id="\''+item.projectID+'\'">'+
                 '<h6>Project ID: ' + item.projectID + '</h6>' +
                 '<h3>' + '<input id="\''+item.projectTitleEdit+'\'" value="'+item.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
                 '<input id="\''+item.projectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
-                '<br></br>' +
+                
                 '<div>'+
                 '<p>'+
                 '<a data-toggle="collapse" href="'+"#"+item.projectID+item.projectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
                 '</p>'+
-                '<div class="collapse" id="'+item.projectID+item.projectID+'">'+
+                '<div class="collapse pb-3" id="'+item.projectID+item.projectID+'">'+
                   '<div class="card card-body">'+
-                  '<span class="glyphicon glyphicon-user"></span>' + " " +''+
-                  '<input id="\''+item.projectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
-                  '<input id="\''+item.projectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
-                  '<input id="\''+item.projectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-flag"></span>' + " " +''+
-                  '<input id="\''+item.projectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
-                  '<br></br>' +
+                  '<i class="fa fa-user pb-3">' + " " +''+
+                  '<input id="\''+item.projectCliNameEdit+'\'" value="'+item.name+'"  readonly required></i>'+
+                  
+                  '<i class="fa fa-phone pb-3">' + " " +''+
+                  '<input id="\''+item.projectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required></i>'+
+                  
+                  '<i class="fa fa-envelope pb-3">' + " " +''+
+                  '<input id="\''+item.projectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</i>" +
+                  
+                  '<i class="fa fa-flag pb-3">' + " " +''+
+                  '<input id="\''+item.projectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</i>' +
+                  
                   '</div>'+
                 '</div>'+
                 '</div>'+
@@ -180,29 +180,29 @@ for (var i = 1; i <= totalPage; i++) {
 
     listslice.map(function(item,index) {
 projectList.innerHTML +='<div class="col-md-4">' +
-                  '<div class="well box-style-2" id="\''+item.projectID+'\'">'+
+                  '<div class="card card-body box-style-2" id="\''+item.projectID+'\'">'+
                 '<h6>Project ID: ' + item.projectID + '</h6>' +
                 '<h3>' + '<input id="\''+item.projectTitleEdit+'\'" value="'+item.title+'"  class="text-capitalize title-size" readonly required>' + '</h3>'+
                 '<input id="\''+item.projectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
-                '<br></br>' +
+                
                 '<div>'+
                 '<p>'+
                 '<a data-toggle="collapse" href="'+"#"+item.projectID+item.projectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
                 '</p>'+
-                '<div class="collapse" id="'+item.projectID+item.projectID+'">'+
+                '<div class="collapse pb-3" id="'+item.projectID+item.projectID+'">'+
                   '<div class="card card-body">'+
-                  '<span class="glyphicon glyphicon-user"></span>' + " " +''+
-                  '<input id="\''+item.projectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
-                  '<input id="\''+item.projectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
-                  '<input id="\''+item.projectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-flag"></span>' + " " +''+
-                  '<input id="\''+item.projectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
-                  '<br></br>' +
+                  '<i class="fa fa-user pb-3">' + " " +''+
+                  '<input id="\''+item.projectCliNameEdit+'\'" value="'+item.name+'"  readonly required></i>'+
+                  
+                  '<i class="fa fa-phone pb-3">' + " " +''+
+                  '<input id="\''+item.projectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required></i>'+
+                  
+                  '<i class="fa fa-envelope pb-3">' + " " +''+
+                  '<input id="\''+item.projectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</i>" +
+                  
+                  '<i class="fa fa-flag pb-3">' + " " +''+
+                  '<input id="\''+item.projectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</i>' +
+                  
                   '</div>'+
                 '</div>'+
                 '</div>'+

@@ -308,52 +308,51 @@ function checkImage(progressID,progressTitleEdit,progressStatusEdit,progressVisi
     progressImageURLEdit = currentImageObject.imgURL; 
 
     progressList.innerHTML +='<div class="col-md-4">' +
-    							'<div class="well box-style-2" id="\''+progressID+'\'">'+
+    							'<div class="card card-body box-style-2" id="\''+progressID+'\'">'+
 								'<h6>Progress ID: ' +progressID+ '</h6>' +
 								'<img src="'+progressImageURLEdit+'"class="img-thumbnail contentImage">' +
-								'<h3>' + '<input id="\''+progressTitleEdit+'\'" value="'+title+'" class="text-capitalize" readonly required>' + '</h3>'+
+								'<h3 class="pt-2">' + '<input id="\''+progressTitleEdit+'\'" value="'+title+'" class="text-capitalize" readonly required>' + '</h3>'+
 								''+ (status === "completed" ? '<h6>' + '<input id="\''+progressStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>'+'</h6>': '<h6>'+'<input id="\''+progressStatusEdit+'\'" value="In progress" class="text-capitalize" readonly required>'+'</h6>')+''+
 								'<select id="\''+progressSelectStatusEdit+'\'" class="hidden"><option id="\''+progressSelectStatusEdit+'\'5" value="5%">5%</option><option id="\''+progressSelectStatusEdit+'\'25" value="25%">25%</option><option id="\''+progressSelectStatusEdit+'\'50" value="50%">50%</option><option id="\''+progressSelectStatusEdit+'\'75" value="75%">75%</option><option id="\''+progressSelectStatusEdit+'\'100" value="completed">Completed</option></select></h6>' +
 								'<div class="progress">'+
 								''+ (status === "completed" ? '<div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>' : '<div class="progress-bar" role="progressbar" style="width: '+status+';" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">'+status+'</div>') +''+
 								'</div>'+
+								
 								//'<h5>' + "Description: " + '<input id="\''+projectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
-								'<span class="glyphicon glyphicon-time ">' +" "+ '<input id="\''+progressDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-eye-open ">' + " " +'<input id="\''+progressVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
+								'<i class="fa fa-calendar py-3">' +" "+ '<input id="\''+progressDateEdit+'\'" type="Date" value="'+date+'"  readonly required>' + '</i>' +
+								
+								'<i class="fa fa-eye pb-3">' + " " +'<input id="\''+progressVisibilityEdit+'\'" type="text" value="'+getVisibility(visibility)+'" class="text-uppercase" readonly required>' + 
 								'<label id="\''+progressEveryoneLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressEveryoneEdit+'\'" name="\''+progressID+"visibility"+'\'" checked>Everyone </label>' +
-								'<label id="\''+progressUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressUserOnlyEdit+'\'" name="\''+progressID+"visibility"+'\'">Members</label></span>' +
-								'<br></br>' +
-								'<span class="glyphicon glyphicon-comment "></span>' + " " +''+
-								'<input class="" id="\''+progressNotesEdit+'\'" value="'+notes+'"  readonly>'+
+								'<label id="\''+progressUserOnlyLabel+'\'" class="radio-inline hidden"><input type="radio" id="\''+progressUserOnlyEdit+'\'" name="\''+progressID+"visibility"+'\'">Members</label></i>' +
+								'<i class="fa fa-comment pb-3">' + " " +''+
+								'<input class="" id="\''+progressNotesEdit+'\'" value="'+notes+'"  readonly></i>'+
 								'<div id="\''+progressNotesEdit+progressID+'\'">'+
 								'<p>'+
 								'<a data-toggle="collapse" href="'+"#"+progressID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Read more</a>'+
 								'</p>'+
-								'<div class="collapse" id="'+progressID+'">'+
+								'<div class="collapse pb-3" id="'+progressID+'">'+
   								'<div class="card card-body">'+notes+'</div>'+
 								'</div>'+
 								'</div>'+
-								'<br></br>' +
-								'<a href="#" onclick="selectProgressImages(\''+progressID+'\')" data-toggle="modal" data-target="#progressShowMore" class="a btn btn-success">Show more</a>' + " " + 
-								'<a href="#" onclick="saveEdit(\''+progressID+'\', \''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressDateEdit+'\',\''+progressNotesEdit+'\',\''+progressTitleEdit+'\')" class="a btn btn-success">Save</a>' + " " + 
+								'<a href="#" onclick="selectProgressImages(\''+progressID+'\')" data-toggle="modal" data-target="#progressShowMore" class="a btn btn-success my-3">Show more</a>' + " " + 
+								'<a href="#" onclick="saveEdit(\''+progressID+'\', \''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressDateEdit+'\',\''+progressNotesEdit+'\',\''+progressTitleEdit+'\')" class="a btn btn-success my-3">Save</a>' + " " + 
 								'<a href="#" onclick="cancelEdit(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressNotesEdit+progressID+'\')" class="a btn btn-danger">cancel</a>' + " " + 
 								'<div class="btn-group action-btn">' +
-								'<button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
+								'<button type="button" class="btn btn-warning dropdown-toggle " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action<span class="caret"></span></button>' +
 								'<ul class="dropdown-menu">' +
-							    '<li><a href="#" onclick="editProgress(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressNotesEdit+progressID+'\',\''+status+'\',\''+visibility+'\',\''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\')">Edit</a></li>'+
+							    '<li><a class="dropdown-item" href="#" onclick="editProgress(\''+progressID+'\',\''+progressVisibilityEdit+'\',\''+progressEveryoneLabel+'\',\''+progressUserOnlyLabel+'\',\''+progressStatusEdit+'\',\''+progressSelectStatusEdit+'\',\''+progressNotesEdit+progressID+'\',\''+status+'\',\''+visibility+'\',\''+progressEveryoneEdit+'\',\''+progressUserOnlyEdit+'\')">Edit</a></li>'+
 							    '<li role="separator" class="divider"></li>'+
-							    '<li><a href="#" onclick="deleteProgress(\''+progressID+'\')" >Delete</a></li>' +
+							    '<li><a class="dropdown-item" href="#" onclick="deleteProgress(\''+progressID+'\')" >Delete</a></li>' +
 							  	'</ul>'+
 							  	'</div>' +
 							  	'<div>'+ 
-							  	'<h6>Last modified on '+updatedtime+'</h6>'+
+							  	'<h6 class="pt-2">Last modified on '+updatedtime+'</h6>'+
 							  	'</div>'+
 							  	'</div>' +
 								'</div>';	
 
     	// progressList.innerHTML +='<div class="col-md-4">' +
-    	// 						'<div class="well box-style-2" id="\''+progressID+'\'">'+
+    	// 						'<div class="card card-body box-style-2" id="\''+progressID+'\'">'+
 					// 			'<h6>Progress ID: ' +progressID+ '</h6>' +
 					// 			'<img src="'+progressImageURLEdit+'"class="img-thumbnail contentImage">' +
 					// 			'<h3>' + '<input id="\''+progressStatusEdit+'\'" value="'+status+'" class="text-capitalize" readonly required>' +
@@ -592,8 +591,7 @@ function selectProgressImages(progressId){
     // Hide images //
     progressImageList.innerHTML ='<div class="form-group">'+
                 '<label for="progressUploadAddOnImages">Upload Images * (Image Only)</label>'+
-                '<input type="file" class="upload-group" id="progressUploadAddOnImages" required multiple>'+
-                '<br>'+
+                '<input type="file" class="upload-group form-text pb-3" id="progressUploadAddOnImages" required multiple>'+
                 '<a href="#"class="btn btn-success" onclick="addProgressImages(\''+progressId+'\',\''+keys.length+'\')">'+'Add</a>'+'</div>'+'<br>' +
              '</div>';
 
@@ -709,7 +707,6 @@ for (var i = 1; i <= totalPage; i++) {
 	//calculate page
 	indexOfLastDevice = currentDevice * devicesPerPage;
 	indexOfFirstDevice = indexOfLastDevice - devicesPerPage;
-
 	//re-run html
 	var listslice = list.slice(
      	indexOfFirstDevice,
@@ -717,7 +714,7 @@ for (var i = 1; i <= totalPage; i++) {
      	);
 
     listslice.map(function(item,index) {
-   		checkImage(item.progressID,item.progressStatusEdit,item.progressVisibilityEdit,item.progressDateEdit,item.progressNotesEdit,item.progressSelectStatusEdit,item.progressEveryoneLabel,item.progressUserOnlyLabel,item.progressEveryoneEdit,item.progressUserOnlyEdit,item.status,item.notes,item.visibility,item.date);
+   		checkImage(item.progressID,item.progressTitleEdit,item.progressStatusEdit,item.progressVisibilityEdit,item.progressDateEdit,item.progressNotesEdit,item.progressSelectStatusEdit,item.progressEveryoneLabel,item.progressUserOnlyLabel,item.progressEveryoneEdit,item.progressUserOnlyEdit,item.status,item.notes,item.visibility,item.date,item.title,item.updatedtime);
    	});
 
 }

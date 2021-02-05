@@ -72,30 +72,30 @@ function fetchDefects(userId){
       );
     listslice.map(function(item,index) {
     defectList.innerHTML +='<div class="col-md-6">' +
-                  '<div class="well box-style-2" id="\''+item.defectID+'\'">'+
+                  '<div class="card card-body box-style-2" id="\''+item.defectID+'\'">'+
                 '<h6>Defect ID: ' + item.defectID + '</h6>' +
                 '<h3>' + '<input id="\''+item.defectTitleEdit+'\'" value="'+item.title+'" class="text-capitalize title-size" readonly required>' + '</h3>'+
                 // '<h5>' + "Description: " + '<input id="\''+defectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
                 '<input id="\''+item.defectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
-                '<br></br>' +
+                
                 '<div>'+
                 '<p>'+
                 '<a data-toggle="collapse" href="'+"#"+item.defectID+item.defectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
                 '</p>'+
-                '<div class="collapse" id="'+item.defectID+item.defectID+'">'+
+                '<div class="collapse pb-3" id="'+item.defectID+item.defectID+'">'+
                   '<div class="card card-body">'+
-                  '<span class="glyphicon glyphicon-user"></span>' + " " +''+
-                  '<input id="\''+item.defectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
-                  '<input id="\''+item.defectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
-                  '<input id="\''+item.defectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-flag"></span>' + " " +''+
-                  '<input id="\''+item.defectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
-                 '<br></br>' +
+                  '<i class="fa fa-user pb-3">' + " " +''+
+                  '<input id="\''+item.defectCliNameEdit+'\'" value="'+item.name+'"  readonly required></i>'+
+                  
+                  '<i class="fa fa-phone pb-3">' + " " +''+
+                  '<input id="\''+item.defectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required></i>'+
+                  
+                  '<i class="fa fa-envelope pb-3">' + " " +''+
+                  '<input id="\''+item.defectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</i>" +
+                  
+                  '<i class="fa fa-flag pb-3">' + " " +''+
+                  '<input id="\''+item.defectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</i>' +
+                  
                   '</div>'+
                 '</div>'+
                 '</div>'+
@@ -177,30 +177,30 @@ for (var i = 1; i <= totalPage; i++) {
 
     listslice.map(function(item,index) {
 defectList.innerHTML +='<div class="col-md-6">' +
-                  '<div class="well box-style-2" id="\''+item.defectID+'\'">'+
+                  '<div class="card card-body box-style-2" id="\''+item.defectID+'\'">'+
                 '<h6>Defect ID: ' + item.defectID + '</h6>' +
                 '<h3>' + '<input id="\''+item.defectTitleEdit+'\'" value="'+item.title+'" class="text-capitalize title-size" readonly required>' + '</h3>'+
                 // '<h5>' + "Description: " + '<input id="\''+defectDescEdit+'\'" value="'+currentObject.description+'"  readonly>' + '</h5>'+
                 '<input id="\''+item.defectDateEdit+'\'" type="Date" value="'+item.date+'"  readonly required>' + 
-                '<br></br>' +
+                
                 '<div>'+
                 '<p>'+
                 '<a data-toggle="collapse" href="'+"#"+item.defectID+item.defectID+'" role="button" aria-expanded="false" aria-controls="collapseExample">Client Details</a>'+
                 '</p>'+
-                '<div class="collapse" id="'+item.defectID+item.defectID+'">'+
+                '<div class="collapse pb-3" id="'+item.defectID+item.defectID+'">'+
                   '<div class="card card-body">'+
-                  '<span class="glyphicon glyphicon-user"></span>' + " " +''+
-                  '<input id="\''+item.defectCliNameEdit+'\'" value="'+item.name+'"  readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-earphone"></span>' + " " +''+
-                  '<input id="\''+item.defectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required>'+
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-envelope"></span>' + " " +''+
-                  '<input id="\''+item.defectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</span>" +
-                  '<br></br>' +
-                  '<span class="glyphicon glyphicon-flag"></span>' + " " +''+
-                  '<input id="\''+item.defectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</span>' +
-                 '<br></br>' +
+                  '<i class="fa fa-user pb-3">' + " " +''+
+                  '<input id="\''+item.defectCliNameEdit+'\'" value="'+item.name+'"  readonly required></i>'+
+                  
+                  '<i class="fa fa-phone pb-3">' + " " +''+
+                  '<input id="\''+item.defectCliNumEdit+'\'" type="number" value="'+item.number+'" readonly required></i>'+
+                  
+                  '<i class="fa fa-envelope pb-3">' + " " +''+
+                  '<input id="\''+item.defectCliEmailEdit+'\'" type="email" value="'+item.email+'"  readonly required>' + "</i>" +
+                  
+                  '<i class="fa fa-flag pb-3">' + " " +''+
+                  '<input id="\''+item.defectLocationEdit+'\'" value="'+item.location+'"  readonly required>' + '</i>' +
+                  
                   '</div>'+
                 '</div>'+
                 '</div>'+

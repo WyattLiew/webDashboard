@@ -8,15 +8,11 @@
   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-amber.min.css" />
 	<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-     <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-  <script
-    src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+           <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
 	<!-- Main Stylesheet -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -52,9 +48,9 @@
       
       <header id="header">
       <div class="container">
-      	<div class="row">
+      	<div class="py-3">
       		<div class="col-md-10 col-xs-10">
-      			<h1><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Dashboard <small>Manage your projects</small></h1>
+      			<h1><i class="fa fa-home" aria-hidden="true"></i> Dashboard <small>Manage your projects</small></h1>
       		</div>
 	      		<!-- <div class="col-md-2">
 	      			<div class="dropdown create">
@@ -74,7 +70,7 @@
   <section id="breadcrumb">
   	<div class="container">
   		<ol class="breadcrumb">
-  			<li class="active">
+  			<li class="breadcrumb-item active">
   				Home
   			</li>
   		</ol>
@@ -86,34 +82,34 @@
 		<div class="row">
 			<div class="col-md-3">
 				<div class="list-group">
-				  <button type="button" class="list-group-item main-color-background"><span class="glyphicon glyphicon-cog"></span> Shortcut</button>
-				  <a href="projectList.html" role="button" class="list-group-item col-md-12 col-xs-12">Projects</a>
+				  <button type="button" class="list-group-item main-color-background h5"><i class="fa fa-cog"></i> Shortcut</button>
+          <button id="paging-project" type="button" class="list-group-item">Projects</button>
           <button id="paging-defects" type="button" class="list-group-item">Defects</button>
           <button id="paging-users" type="button" class="list-group-item hidden">Users</button>
 				</div>
 			</div>
 			<div class="col-md-9">
 				<!-- Project Overview -->
-				<div class="panel panel-default">
-				  <div class="panel-heading main-color-background">
-				    <h3 class="panel-title">Project Overview</h3>
+				<div class="card card-default">
+				  <div class="card-header main-color-background">
+				    <div class="card-title h5">Project Overview</div>
 				  </div>
-				  <div class="panel-body">
+				  <div class="card-body row">
 				   	<div class="col-md-4">
-				   		<div class="well dash-box">
-				   			<h2 id="overviewProj"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> -</h2>
+				   		<div class="card card-body dash-box">
+				   			<h2 id="overviewProj"><i class="fa fa-list-alt" aria-hidden="true"></i> -</h2>
 				   			<h4>Projects</h4>
 				   		</div>
 				   	</div>
 				   	<div class="col-md-4">
-				   		<div class="well dash-box">
-				   			<h2 id="overviewDef"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> -</h2>
+				   		<div class="card card-body dash-box">
+				   			<h2 id="overviewDef"><i class="fa fa-pencil" aria-hidden="true"></i> -</h2>
 				   			<h4>Defects</h4>
 				   		</div>
 				   	</div>
 				   	<div class="col-md-4">
-				   		<div class="well dash-box">
-				   			<h2 id="overviewClient"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> -</h2>
+				   		<div class="card card-body dash-box">
+				   			<h2 id="overviewClient"><i class="fa fa-user" aria-hidden="true"></i> -</h2>
 				   			<h4>Clients</h4>
 				   		</div>
 				   	</div>
@@ -121,11 +117,11 @@
 				</div>
 
 				<!-- CLient Details -->
-				<div class="panel panel-default">
-				  <div class="panel-heading main-color-background">
-				    <h3 class="panel-title">Client Details</h3>
+				<div class="card card-default my-3">
+				  <div class="card-header main-color-background">
+				    <div class="card-title h5">Client Details</div>
 				  </div>
-				  <div class="panel-body">
+				  <div class="card-body">
             <div class="table-responsive">
             <table id="clientDetails" class="table table-hover">
       
@@ -203,6 +199,11 @@
 <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-database.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
 <script>
   // Initialize Firebase
   var config = {
